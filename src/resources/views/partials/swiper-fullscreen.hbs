@@ -1,0 +1,108 @@
+<div class="slide-full-screen d-none bg-dark user-select-none" tabindex="0">
+    <div class="h-100">
+        <div class="h-100 position-relative d-flex align-items-center justify-content-center">
+            <div class="swiper-info">
+                <div class="container">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div id="slide-process"></div>
+                        <div class="d-flex">
+                            <a class="p-2 me-2 download" download role="button"><i class="bi bi-download"></i></a class="p-2">
+                            <span class="p-2 close" role="button"><i class="bi bi-x-lg"></i></span class="p-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-prev"><i class="bi bi-chevron-left"></i></div>
+            <img loading="lazy" src="" alt="" class="d-block" id="slider-img">
+            <div class="swiper-next"><i class="bi bi-chevron-right"></i></div>
+        </div>
+    </div>
+</div>
+
+<script defer>
+
+    var sliderImg = document.querySelector('#slider-img')
+    var slideNextBtn = document.querySelector('.slide-full-screen .swiper-next')
+    var slidePrevBtn = document.querySelector('.slide-full-screen .swiper-prev')
+    var slideFullScreen = document.querySelector('.slide-full-screen')
+    var imgs = document.querySelectorAll('.desc-swiper-container img')
+    var slideProcess = document.querySelector('#slide-process')
+    var slideDownloadBtn = slideFullScreen.querySelector('.download')
+    var slideCloseBtn = slideFullScreen.querySelector('.close')    
+
+    const slider = {
+        renderImg() {
+            if(imgs) {
+                imgs.forEach(element => {
+                    element.onclick = function () {
+                        document.body.classList.add('overflow-hidden')
+                        sliderImg.src = this.src
+                        sliderImg.dataset.index = element.dataset.index
+                        slideProcess.textContent = `${parseInt(element.dataset.index) + 1}/${imgs.length}`
+                        slideFullScreen.classList.remove('d-none')
+                        slideDownloadBtn.href = `${this.src}`
+                        slideFullScreen.focus()
+                    }
+                })
+
+            }
+        },
+
+        handleArrowBtn() {
+            slideFullScreen.onkeydown = function (e) {
+                switch(e.keyCode) {
+                    case 37: 
+                        slidePrevBtn.click()
+                        break
+                    case 39:
+                        slideNextBtn.click()
+                        break
+                }
+            }
+        },
+
+        handlePrevBtn() {
+            slidePrevBtn.onclick = function () {
+                var total = imgs.length
+                var currentIndex = parseInt(sliderImg.dataset.index)
+                var nextSlide = (total + currentIndex - (1 % total)) % total
+
+                sliderImg.src = imgs[nextSlide].src
+                sliderImg.dataset.index = imgs[nextSlide].dataset.index
+                slideProcess.textContent = `${nextSlide + 1}/${imgs.length}`
+                slideDownloadBtn.href = `${this.src}`
+            }
+        },
+
+        handleNextBtn() {
+            slideNextBtn.onclick = function () {
+                var total = imgs.length
+                var currentIndex = parseInt(sliderImg.dataset.index)
+                var nextSlide = (total + currentIndex + (1 % total)) % total
+
+                sliderImg.src = imgs[nextSlide].src
+                sliderImg.dataset.index = imgs[nextSlide].dataset.index
+                slideProcess.textContent = `${nextSlide + 1}/${imgs.length}`
+                slideDownloadBtn.href = `${this.src}`
+            }
+        },
+
+        handleCloseBtn() {
+            slideCloseBtn.onclick = function () {
+                slideFullScreen.classList.add('d-none')
+                document.body.classList.remove('overflow-hidden')
+            }
+        },
+
+        start() {
+            this.renderImg()
+            this.handleArrowBtn()
+            this.handlePrevBtn()
+            this.handleNextBtn()
+            this.handleCloseBtn()
+        },
+    }
+
+    slider.start()
+    
+</script>

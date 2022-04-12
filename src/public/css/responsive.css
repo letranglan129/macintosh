@@ -1,0 +1,188 @@
+@media (max-width: 480px) {
+  .navbar .navbar-brand {
+    display: flex;
+    flex: 1;
+    margin-right: auto; } }
+
+/* <=576px */
+@media (max-width: 576px) {
+  * {
+    font-size: 13px; }
+  .app-item {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .modal .modal-body {
+    padding: 0 40px 24px; }
+  .comment .avatar-input textarea {
+    width: calc(100% - var(--avatar-width));
+    flex: unset; }
+  .comment .avatar-input button {
+    margin-left: auto;
+    margin-top: 12px; }
+  .swiper.gallery-top img {
+    height: auto;
+    width: 100%; } }
+
+/* >=576px */
+@media (min-width: 576px) {
+  .navbar .avatar {
+    width: 45px;
+    height: 45px; }
+  #about-macos {
+    display: grid;
+    grid-template-areas: "h1" "h2" "h3";
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x); }
+  .card-apps-list {
+    display: grid;
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x);
+    --grid-col: 2;
+    grid-template-columns: repeat(var(--grid-col), minmax(0, 1fr)); }
+  .popular-macos {
+    grid-area: h1; }
+  .tutorial-macos {
+    grid-area: h2; }
+  .app-film-macos {
+    grid-area: h3; }
+  .app-film-macos .app-item {
+    justify-content: space-between;
+    margin-bottom: 20px; }
+  .play-more-list {
+    display: grid;
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x);
+    --grid-col: 3;
+    grid-template-columns: repeat(var(--grid-col), minmax(0, 1fr)); } }
+
+/* >=768px */
+@media (min-width: 768px) {
+  .game-new-list {
+    display: grid;
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x);
+    --grid-col: 2;
+    grid-template-columns: repeat(var(--grid-col), minmax(0, 1fr)); } }
+
+@media (max-width: 768px) {
+  :root {
+    --single-app-top-height: 100px; }
+  .card-pic .card-img-link.absolute-img {
+    height: 280px; }
+  .app-detail .detail-wrap {
+    height: auto; }
+  .app-detail .detail-left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    margin-bottom: 16px; }
+  .app-detail .detail-left img {
+    margin-right: auto; }
+  .app-detail .detail-right {
+    width: 100%; }
+  .sub-card-group .card-pic img {
+    height: 150px; } }
+
+/* <= 992px */
+@media (max-width: 992px) {
+  .navbar-right .navbar-link-btn-open {
+    width: 32px;
+    height: 32px;
+    background-color: var(--dark-mode-color);
+    border: none;
+    outline: none;
+    color: var(--bs-white);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; }
+  .navbar-right .dropdown-toggle::after {
+    display: none; }
+  #onSidebar {
+    padding-right: 0 12px 0 0; }
+  .navbar-right form {
+    display: none; }
+  .navbar-right .navbar-search-btn-open {
+    width: 32px;
+    height: 32px;
+    background-color: var(--dark-mode-color);
+    border: none;
+    outline: none;
+    color: var(--bs-white);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; }
+  .dark .navbar-right .navbar-link-btn-open,
+  .dark .navbar-right .navbar-search-btn-open {
+    background-color: var(--bs-white);
+    color: var(--dark-mode-color); }
+  .navbar-right #navbar-search-btn-radio:checked ~ form {
+    display: flex;
+    align-items: center;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: var(--bs-white);
+    z-index: 2;
+    height: var(--navbar-height); }
+  .dark .navbar-right #navbar-search-btn-radio:checked ~ form {
+    background-color: #34394e; }
+  .navbar .search-icon {
+    position: unset;
+    height: unset;
+    padding: 0 18px; }
+  #content #news-item {
+    margin-bottom: 0; }
+  #content #related-news {
+    margin-bottom: var(--footer-height); } }
+
+@media (min-width: 992px) {
+  #content .banner .card-link .card .card-title {
+    font-size: 26px; }
+  #about-macos {
+    display: grid;
+    grid-template-areas: "h1 h2" "h1 h3";
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x); }
+  .card-apps-list {
+    display: grid;
+    grid-gap: var(--bs-gutter-y) var(--bs-gutter-x);
+    --grid-col: 2;
+    grid-template-columns: repeat(var(--grid-col), minmax(0, 1fr)); }
+  .popular-macos {
+    grid-area: h1; }
+  .tutorial-macos {
+    grid-area: h2; }
+  .app-film-macos {
+    grid-area: h3; }
+  .app-film-macos .app-item {
+    justify-content: space-between;
+    margin-bottom: 20px; }
+  .news-list {
+    grid-template-areas: "h1 h1 h2"; } }
+
+/* <= 1200px */
+@media (max-width: 1200px) {
+  #onSidebar {
+    padding-right: 0 12px 0 0;
+    outline: none;
+    border: none;
+    background-color: transparent; }
+  #content {
+    left: 0;
+    transform: translateX(0); }
+  #content.active {
+    transform: translateX(var(--sidebar-width)); } }
+
+/* >=1200px */
+@media (min-width: 1200px) {
+  #sidebar {
+    display: block; }
+  #sidebar {
+    position: fixed;
+    height: calc(100vh - var(--navbar-height));
+    background: var(--bs-white);
+    top: var(--navbar-height);
+    transform: translateX(0); } }

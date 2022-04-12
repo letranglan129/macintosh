@@ -1,0 +1,434 @@
+<section id="create-new">
+    <div class="container g-3">
+        <div class="title">
+            <a href="/dashboard" class="fs-3 me-3">
+                <i class="bi bi-arrow-left-circle"></i>
+            </a>
+            <i class="bi bi-file-earmark-plus"></i>
+            Tạo mới
+        </div>
+        <hr class="my-4" />
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </symbol>
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </symbol>
+        </svg>
+        {{#if Err}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+
+        <form method="POST" name="create-form" onsubmit="getContent()" action="/dashboard/app/create" autocomplete="off"
+            enctype="multipart/form-data">
+
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="input-group input-group-sm mb-3">
+                    <label for="name" class="input-group-text">Tên app</label>
+                    <input type="text" class="form-control input-requierd" id="name" name="name" autocomplete="off" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+                <div class="input-group input-group-sm mb-3 mx-5">
+                    <label for="type" class="input-group-text">Loại</label>
+                    <input type="text" class="form-control input-requierd" id="type" name="type" autocomplete="off" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <label for="price" class="input-group-text" id="type">Giá</label>
+                    <input type="number" class="form-control input-requierd" id="price" name="price" min="0"
+                        autocomplete="off" value="0" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+            </div>
+
+            <div class="input-group input-group-sm mb-3" id="categoryType">
+                <p class="w-100">Category</p>
+
+                {{{renderCategoryListCreate type}}}
+
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3 d-none" id="type-of-game">
+                <p class="w-100">Thể loại game</p>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input me-1 input-equipment" type="checkbox"
+                        name="category-item-checkboxall" id="check-all-catogery">
+                    <label for="check-all-catogery">Tất cả</label>
+                </div>
+                {{{renderTypeGame typeGames}}}
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3" id="equipment-list">
+                <p class="w-100">Thiết bị</p>
+                {{{renderEquipment equipmentList}}}
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <label for="img" class="form-label w-100">App icon</label>
+                <input type="file" class="form-control input-requierd" id="img" name="img" autocomplete="off" />
+                <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <label for="descImage" class="form-label w-100">Swiper image</label>
+                <input type="file" class="form-control input-requierd" id="descImage" name="descImage"
+                    autocomplete="off" multiple />
+                <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="input-group input-group-sm mb-3 me-2">
+                    <label for="link" class="input-group-text">Link download</label>
+                    <input type="text" class="form-control input-requierd" id="link" name="link"
+                        value="nimo.tv/senameta" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+                <div class="input-group input-group-sm mb-3 ms-2">
+                    <label for="link" class="input-group-text">Kích thước (MB)</label>
+                    <input type="number" class="form-control input-requierd" id="size" step="0.1" name="size"
+                        value="0" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+            </div>
+            <div class="text-format d-flex">
+                <input type="color" id="changeColor">
+                <button onclick="document.execCommand('bold', true, '600')" type="button"><i
+                        class="bi bi-type-bold"></i></button>
+                <button onclick="document.execCommand('italic')" type="button"><i
+                        class="bi bi-type-italic"></i></button>
+                <button onclick="document.execCommand('underline')" type="button"><i
+                        class="bi bi-type-underline"></i></button>
+                <button onclick="document.execCommand('insertUnorderedList')" type="button"><i
+                        class="bi bi-list-ul"></i></button>
+                <button onclick="document.execCommand('insertOrderedList')" type="button"><i
+                        class="bi bi-list-ol"></i></button>
+                <button onclick="document.execCommand('indent')" type="button"><i
+                        class="bi bi-text-indent-left"></i></button>
+                <button onclick="document.execCommand('outdent')" type="button"><i
+                        class="bi bi-text-indent-right"></i></button>
+                <button onclick="document.execCommand('justifyLeft')" type="button"><i
+                        class="bi bi-text-left"></i></button>
+                <button onclick="document.execCommand('justifyCenter')" type="button"><i
+                        class="bi bi-text-center"></i></button>
+                <button onclick="document.execCommand('justifyRight')" type="button"><i
+                        class="bi bi-text-right"></i></button>
+                <button onclick="document.execCommand('justifyFull')" type="button"><i
+                        class="bi bi-justify"></i></button>
+                <button onclick="document.execCommand('undo')" type="button"><i
+                        class="bi bi-arrow-counterclockwise"></i></button>
+                <button onclick="document.execCommand('redo')" type="button"><i
+                        class="bi bi-arrow-clockwise"></i></button>
+                <button onclick="addLink()" type="button"><i class="bi bi-link"></i></button>
+                <button onclick="document.execCommand('unlink')" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 1792 1792" width="16">
+                        <path
+                            d="M503 1271l-256 256q-10 9-23 9-12 0-23-9-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23zm169 41v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm-224-224q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm1264 128q0 120-85 203l-147 146q-83 83-203 83-121 0-204-85l-334-335q-21-21-42-56l239-18 273 274q27 27 68 27.5t68-26.5l147-146q28-28 28-67 0-40-28-68l-274-275 18-239q35 21 56 42l336 336q84 86 84 204zm-617-724l-239 18-273-274q-28-28-68-28-39 0-68 27l-147 146q-28 28-28 67 0 40 28 68l274 274-18 240q-35-21-56-42l-336-336q-84-86-84-204 0-120 85-203l147-146q83-83 203-83 121 0 204 85l334 335q21 21 42 56zm633 84q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm-544-544v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm407 151l-256 256q-11 9-23 9t-23-9q-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23z" />
+                    </svg>
+                </button>
+                <button onclick="document.execCommand('formatBlock', false,'h1')" type="button">H1</button>
+                <button onclick="document.execCommand('formatBlock', false,'h2')" type="button">H2</button>
+                <button onclick="document.execCommand('formatBlock', false,'h3')" type="button">H3</button>
+                <button onclick="document.execCommand('formatBlock', false,'h4')" type="button">H4</button>
+                <button onclick="document.execCommand('formatBlock', false,'h5')" type="button">H5</button>
+                <button onclick="document.execCommand('formatBlock', false,'h6')" type="button">H6</button>
+                <button type="button">
+                    <label for="insertImage">
+                        <i class="bi bi-card-image text-dark"></i>
+                    </label>
+                    <input type="file" id="insertImage" hidden>
+                </button>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Mô tả</span>
+                <div class="form-control m-0 text-dark" style="min-height: 200px; padding-bottom: 60px"
+                    contenteditable="true" id="field-input-desc"></div>
+                <textarea class="input-requierd" id="desc" name="desc" style="display: none;"></textarea>
+                <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-primary mb-3">Confirm</button>
+        </form>
+
+    </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"
+    integrity="sha512-VQQXLthlZQO00P+uEu4mJ4G4OAgqTtKG1hri56kQY1DtdLeIqhKUp9W/lllDDu3uN3SnUNawpW7lBda8+dSi7w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+    var socket = io()
+    function addLink() {
+        var url = prompt('Nhập link cần chèn:', 'http://www.');
+        var selection = document.getSelection();
+        document.execCommand('createLink', true, url);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const changeColor = document.querySelector('#changeColor');
+        const createNew = document.querySelector('#create-new');
+        const fieldInputDesc = document.querySelector('#field-input-desc');
+        const desc = document.querySelector('#desc');
+        const categoryOptionList = document.querySelectorAll('#categoryType option')
+        const createForm = document.forms['create-form']
+        const submitBtn = document.querySelector('#submit-btn')
+        const typeOfGame = document.querySelector('#type-of-game')
+        const gameCheckbox = document.querySelector('#game-checkbox')
+        const categoryTypeListCheckboxAll = document.querySelector('#check-all-catogery')
+        const categoryItemCheckbox = document.querySelectorAll('[name="typeGame[]"]')
+
+        const page =  {
+
+            changeGameCheckbox() {
+                gameCheckbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        typeOfGame.classList.remove('d-none')
+                    } else {
+                        typeOfGame.classList.add('d-none')
+                    }
+                })
+            },
+
+            checkedAll(checkboxAllElement, checkboxItemElement, selectorcheckboxAll, selectorcheckboxItem) {
+                //Handle when change checkboxAll
+                checkboxAllElement.onchange = () => {
+                    var isCheckAll = document.querySelector(`${selectorcheckboxAll}:checked`) || false
+                    if (isCheckAll)
+                        checkboxItemElement.forEach(item => item.checked = true)
+                    else
+                        checkboxItemElement.forEach(item => item.checked = false)
+                }
+                //Handle when change checkbox item
+                checkboxItemElement.forEach(item => {
+                    item.onclick = () => {
+                        var checkboxItemCheck = document.querySelectorAll(`${selectorcheckboxItem}:checked`)
+                        if (checkboxItemCheck.length === checkboxItemElement.length)
+                            checkboxAllElement.checked = true
+                        else
+                            checkboxAllElement.checked = false
+                    }
+                })
+            },
+
+            //Handle priview image when insert image
+            insertImage() {
+                var input = document.querySelector('#insertImage')
+                input.onchange = function () {
+                    var file = input.files[0]
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        socket.emit('send-img', {
+                            imgBase64: e.target.result,
+                            name: file.name,
+                        })
+                    }
+                    reader.readAsDataURL(file)
+                }
+            },
+
+            //Get img from server & insert desc input
+            getImg() {
+                socket.on('get-img', path => {
+                    var img = document.createElement('img')
+                    var p = document.createElement('p')
+                    p.style.textAlign = 'center'
+                    img.style.maxWidth = '75%'
+                    img.src = path
+                    p.append(img)
+                    fieldInputDesc.append(p)
+                })
+            },
+
+            //change color desc
+            changeColor() {
+                //Handle format text field desc app
+                changeColor.oninput = function () {
+                    document.execCommand('foreColor', false, this.value)
+                }
+            },
+
+            //Handle when input desc
+            getContent() {
+                desc.innerHTML = fieldInputDesc.innerHTML
+            },
+
+            //Handle when blur or typing input
+            handleBlurInput() {
+                var inputRequierd = createForm.querySelectorAll('input[type="text"], input[type="number"]')
+
+                fieldInputDesc.onblur = function () {
+                    var inputGroup = getParent(fieldInputDesc, '.input-group')
+                    if (!fieldInputDesc.innerHTML)
+                        inputGroup.querySelector('.input-message').classList.remove('d-none')
+                    else
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                }
+
+                inputRequierd.forEach(function (el) {
+                    var inputGroup = getParent(el, '.input-group')
+                    el.onblur = function () {
+                        if (!el.value)
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        else
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+
+                    }
+                    el.oninput = function () {
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+            //Handle when click submit 
+            handleValidInput() {
+                var messages = createForm.querySelectorAll('.input-message')
+                var inputEquipment = createForm.querySelectorAll('.input-equipment')
+                var inputArr = []
+                var tmpArray = []
+
+                //Get input message error
+                messages.forEach(message => {
+                    if (!message.classList.contains('d-none'))
+                        inputArr.push([...message.closest('.input-group').querySelectorAll('input, #field-input-desc')])
+                })
+
+                //Flatten Array
+                inputArr.forEach(element => element.forEach(element => tmpArray.push(element)))
+
+                //Handle onput and hidden message
+                tmpArray.forEach(element => {
+                    element.oninput = function () {
+                        element.closest('.input-group')
+                            .querySelector('.input-message')
+                            .classList.add('d-none')
+                    }
+                })
+
+                inputEquipment.forEach(function (el) {
+                    el.onchange = function () {
+                        var inputGroup = getParent(el, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+            inputValid(intputElements) {
+                var isValue = false
+                for (let item of intputElements) {
+                    if (item.value)
+                        isValue = true
+                    else {
+                        isValue = false
+                        break;
+                    }
+                }
+
+                if (!isValue) {
+                    for (let item of intputElements) {
+                        var inputGroup = getParent(item, '.input-group')
+                        if (!item.value) {
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        }
+                        else {
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+                        }
+                    }
+                }
+                return isValue
+            },
+
+            //Validate form
+            checkboxValid(container, arrayCheckbox) {
+                var isChecked = false
+                var arrResult = []
+                arrayCheckbox.forEach(element => {
+                    const checkbox = container.querySelectorAll(`${element} .input-equipment`)
+                    
+                    if(checkbox.length == 0)
+                        return
+
+                    for (let item of checkbox) {
+                        if (item.checked) {
+                            isChecked = true
+                            break;
+                        } else {
+                            isChecked = false
+                        }
+                    }
+
+                    if (!isChecked) {
+                        var inputEquipment = container.querySelector(`${element} .input-equipment`)
+                        var inputGroup = getParent(inputEquipment, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.remove('d-none')
+                    } else {
+                        var inputEquipment = container.querySelector(`${element} .input-equipment`)
+                        var inputGroup = getParent(inputEquipment, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                    arrResult.push(isChecked)
+                })
+
+                return arrResult.includes(false)
+            },
+
+            //submit form
+            submitForm() {
+                var _this = this
+                createForm.onsubmit = function (e) {
+                    var field = createForm.querySelectorAll('.input-requierd, textarea')
+                    var checkboxValidate = ['#categoryType', '#type-of-game:not(.d-none)', '#equipment-list']
+                    var checkbox = createForm.querySelectorAll('.input-equipment')
+
+
+                    var isInputFull = _this.inputValid(field)
+                    var isChecked = _this.checkboxValid(createForm, checkboxValidate)
+                    if (!isInputFull || isChecked) {
+                        window.scrollTo(0, document.querySelector('.input-message:not(d-none)').offsetTop)
+                        e.preventDefault()
+                        _this.handleValidInput()
+                    } else {
+                        this.submit()
+                    }
+                }
+            },
+
+            inputDescChange() {
+                fieldInputDesc.addEventListener('keyup', this.getContent)
+                fieldInputDesc.addEventListener('focus', function () {
+                    document.execCommand("defaultParagraphSeparator", false, "p")
+                })
+                fieldInputDesc.addEventListener('paste', this.getContent)
+            },
+
+            start() {
+                this.checkedAll(categoryTypeListCheckboxAll, categoryItemCheckbox, '#check-all-catogery', '[name="typeGame[]"]')
+                document.execCommand("defaultParagraphSeparator", false, "p");
+                this.changeColor()
+                this.changeGameCheckbox()
+                this.insertImage()
+                this.getImg()
+                this.getContent()
+                this.handleBlurInput()
+                this.inputDescChange()
+                this.submitForm()
+            }
+
+        }
+        page.start()
+
+        
+    })
+
+</script>

@@ -1,0 +1,14 @@
+{
+    "folders": [
+		{
+			"path": "..\\.."
+		},
+		{
+			"path": "D:\\Downloads\\baucua-master"
+		}
+	],
+    "settings": {
+        "git.ignoreLimitWarning": true,
+        "liveServer.settings.multiRootWorkspaceName": "Samsun"
+    }
+}

@@ -1,0 +1,75 @@
+<section id="login" class="user">
+    <div class="title">
+        <p class="h2 mb-3 fw-bold text-center">Đăng nhập</p>
+        <p class="h6 mb-3 text-center">Với mạng xã hội của bạn</p>
+        
+    </div>
+    <div class="d-flex align-items-center justify-content-around mb-4">
+        <a href="/user/auth/google" class="btn btn-primary px-5">
+            <i class="bi bi-google"></i>
+             GOOGLE
+        </a>
+        <a href="/user/auth/facebook" class="btn text-white px-5" style="background:#3a5998">
+            <i class="bi bi-facebook"></i>
+             FACEBOOK
+        </a>
+    </div>
+    <p class="line">
+        <span>hoặc</span>
+    </p>
+    {{{renderMessage success_msg 'success'}}}
+    {{{renderMessage error 'danger'}}}
+    <form method="POST" id="login-form">
+        <div class="mb-3  form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" name="email" class="form-control" id="email" value="letranglan129@gmail.com">
+            <p class="form-message"></p>
+        </div>
+        <div class="mb-3  form-group">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input type="text" name="password" class="form-control" id="password" value="123123">
+            <p class="form-message"></p>
+        </div>
+        <div class="option-login d-flex align-items-center justify-content-between mb-3">
+            <div class="save-login">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="save-user">
+                    <label class="form-check-label" for="save-user">
+                        Ghi nhớ đăng nhập
+                    </label>
+                </div>
+            </div>
+            <div class="forget-password">
+                <a href="">
+                    Quên mật khẩu?
+                </a>
+            </div>
+        </div>
+        <button type="submit" class="py-2 w-100">Đăng nhập</button>
+    </form>
+
+    <div class="register">
+        Bạn không có tài khoản? 
+        <a href="/user/register">Đăng kí ngay</a>
+    </div>
+</section>
+
+<script src="/js/validate.js"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        Validator({
+            formElement: '#login-form',
+            formMessage: '.form-message',
+            formGroup: '.form-group',
+            rules: [
+                Validator.isRequired('#email'),
+                Validator.isEmail('#email'),
+                Validator.isRequired('#password'),
+                Validator.minLength('#password',6),
+            ]
+        })
+    })
+</script>

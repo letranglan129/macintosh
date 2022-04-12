@@ -1,0 +1,66 @@
+<section class="app-desc">
+    <div class="container-lg g-3">
+
+        <div class="desc-title">
+            <h4 class="topic-title fw-bold m-0">Tin hàng đầu</h4>
+            <div class="swiper-img-control">
+                <span class="swiper-prev"><i class="bi bi-chevron-double-left"></i></span>
+                <span class="swiper-next"><i class="bi bi-chevron-double-right"></i></span>
+            </div>
+        </div>
+
+
+        <div class="news-swiper">
+            <div class="swiper swiper-container">
+                <div class="swiper-wrapper">{{{loopSliderNews news 3}}}</div>
+                <div class="swiper-pagination position-relative my-3"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container-lg g-3">
+        <div class="row">
+            <div class="col-lg-8 col-12">
+                <div class="desc-title mb-3">
+                    <h4 class="topic-title fw-bold m-0">Tin mới</h4>
+                </div>
+                {{{renderNewsList news}}}
+                <div class="app-button">
+                    <a href="" class="btn white-border w-100 fs-6 py-2 px-0">Xem tất cả</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="desc-title mb-3">
+                    <h4 class="topic-title fw-bold m-0">Cộng đồng nổi bật</h4>
+                </div>
+                <div class="row mb-4">
+                    {{{renderNewsCommunity}}}
+                    <div class="app-button">
+                        <a href="" class="btn white-border w-100 fs-6 py-2 px-0">Xem tất cả</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var swiperHotNews = new Swiper('.news-swiper .swiper-container', {
+        speed: 800,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        navigation: {
+            nextEl: '.swiper-img-control .swiper-next',
+            prevEl: '.swiper-img-control .swiper-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    })
+</script>

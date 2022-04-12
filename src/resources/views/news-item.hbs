@@ -1,0 +1,222 @@
+<div class="row g-0">
+    <div class="col-lg-8 col-12">
+        <section class="rounded-12px" id="news-item">
+            <div class="container g-3">
+                <div class="news-container">
+                    {{#with infoNews}}
+                    <div class="mb-4">
+                        <div class="news-title">
+                            <h2 class="fw-bold mb-3">{{news.titleNews}}</h2>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="author">
+                                <div class="avatar">
+                                    <img loading="lazy" src="{{userPost.avatar}}" width="40px" class="rounded-circle">
+                                </div>
+                                <div>
+                                    <div class="name">{{userPost.username}}</div>
+                                    <div class="created-news text-color">{{{formatTime news.createdAt}}}</div>
+                                </div>
+                            </div>
+                            <div class="user-contact">
+                                <a href="" class="btn-link link ms-2 h5"><i class="bi bi-bookmark"></i></a>
+                                <a href="" class="btn-link link ms-2 h5"><i class="bi bi-facebook"></i></a>
+                                <a href="" class="btn-link link ms-2 h5"><i class="bi bi-linkedin"></i></a>
+                                <a href="" class="btn-link link ms-2 h5"><i class="bi bi-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text mb-4">{{{news.desc}}}</div>
+
+                    <div class="tag mb-4">
+                        <b class="me-2">Tag:</b>
+                        {{#each news.tag}}
+                        <a href="" class="me-2 btn tag-btn">{{this}}</a>
+                        {{/each}}
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <div class="d-inline-block me-3">
+                                <i class="bi bi-heart" id="like-new"></i>
+                                <span class="ms-2"><span class="amount">{{news.liked}}</span> lượt thích</span>
+                            </div>
+                            <div class="d-inline-block">
+                                <i class="bi bi-chat-text"></i>
+                                <span class="ms-2">{{countComment}} bình luận</span>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="" class="btn-link link ms-2 h5"><i class="bi bi-bookmark"></i></a>
+                            <a href="" class="btn-link link ms-2 h5"><i class="bi bi-facebook"></i></a>
+                            <a href="" class="btn-link link ms-2 h5"><i class="bi bi-linkedin"></i></a>
+                            <a href="" class="btn-link link ms-2 h5"><i class="bi bi-twitter"></i></a>
+                        </div>
+                    </div>
+                    {{/with}}
+
+                    <hr>
+
+                    <section class="comment p-0 mb-0">
+                        <div class="container g-0">
+
+                            {{!-- Form comment user --}}
+                            <div action="" id="user-cmt">
+                                <div class="avatar-input">
+                                    <img loading="lazy" src="{{user.avatar}}" id="cmt-avatar" onerror="this.src='/img/user-icon.svg'"
+                                        class="me-4" />
+                                    <textarea name="" class="flex-grow-1 flex-shrink-0 flex-md-fill" id="textComment"
+                                        rows="1" placeholder="Nhập bình luận..."></textarea>
+                                    <button id="sendComment" class="mb-0 ms-auto ms-sm-4 mt-2 mt-md-0 btn">Gửi bình
+                                        luận</button>
+                                </div>
+                                <p class="form-message text-center d-none">Bạn chưa nhập bình luận</p>
+                            </div>
+
+                            <div class="comment-list" id="cmt-context"></div>
+
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-4 col-12">
+        <div id="related-news">
+            <div class="container g-3 pt-4 pt-lg-0">
+                <div class="desc-title mb-3">
+                    <h4 class="topic-title fw-bold m-0">Tin hàng đầu</h4>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-12 mb-3">
+                        <div class="card card-pic bg-transparent">
+                            <div class="row g-0">
+                                <div class="col-4">
+                                    <div class="card-img">
+                                        <a href="" class="card-img-link h-auto">
+                                            <img loading="lazy"
+                                                src="https://macintosh.vn/wp-content/uploads/2021/06/Screen-Shot-2021-06-22-at-17.45.59-150x150.jpg">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body bg-transparent">
+                                        <a href="" class="card-title text-name">
+                                            Tổng hợp những phần mềm cài cho Macbook mới
+                                        </a>
+                                        <p class="card-text">23/06/2021</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-12 mb-3">
+                        <div class="card card-pic bg-transparent">
+                            <div class="row g-0">
+                                <div class="col-4">
+                                    <div class="card-img">
+                                        <a href="" class="card-img-link h-auto">
+                                            <img loading="lazy"
+                                                src="https://macintosh.vn/wp-content/uploads/2021/06/Screen-Shot-2021-06-22-at-17.45.59-150x150.jpg">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body bg-transparent">
+                                        <a href="" class="card-title text-name">
+                                            Tổng hợp những phần mềm cài cho Macbook mới
+                                        </a>
+                                        <p class="card-text">23/06/2021</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-validate-btn" data-bs-toggle="modal" data-bs-target="#modal-validate-login"></div>
+<div class="modal fade" id="modal-validate-login">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông báo!!!</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn chưa đăng nhập. Đăng nhập để thực hiện chức năng này!!!</p>
+            </div>
+            <div class="modal-footer">
+                <div class="btn btn-danger btn-sm" data-bs-dismiss="modal">Đóng</div>
+                <a href="/user/register" class="btn btn-primary btn-sm">Đăng ký</a>
+                <a href="/user/login" class="btn btn-primary btn-sm">Đăng nhập</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/comment.js"></script>
+<script>
+    var socket = io()
+    const comments = {{{ returnValue comments }}}
+    const userComment = {{{ returnValue userComment }}}
+    const news = {{{ returnValue infoNews.news }}}
+    const user = {{{ returnValue user }}}
+    const userFull = {{{ returnValue userFull }}}
+    const modalValidateBtn = document.querySelector('#modal-validate-btn')
+    const likeNewBtn = document.querySelector('#like-new')
+    handleComment('news')
+
+    
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const page = {
+            conditionLike(button, condition) {
+                if (condition) {
+                    button.classList.add('bi-heart-fill')
+                    button.classList.remove('bi-heart')
+                } else {
+                    button.classList.remove('bi-heart-fill')
+                    button.classList.add('bi-heart')
+                }
+            },
+
+            handleLikeBtnEvent() {
+                var _this = this
+                likeNewBtn.onclick = function (e) {
+                    if (Object.keys(user).length == 0) {
+                        modalValidateBtn.click()
+                    } else {
+                        _this.conditionLike(likeNewBtn, likeNewBtn.matches(`.bi-heart`))
+                        
+                        //send to server user liked comment  
+                        socket.emit('like-news-action', { id: news._id, userId: userFull._id, like: false })
+                    }
+                }
+            },
+            
+            socketResultLikeNews() {
+                socket.on('liked-news', ({ idComment, userLiked }) => {
+                    likeNewBtn.parentElement.querySelector('.amount').textContent = userLiked.length
+                })
+            },
+
+            start () {
+                this.conditionLike(likeNewBtn, news.userLiked.includes(userFull._id))
+                this.handleLikeBtnEvent()
+                this.socketResultLikeNews()
+            }
+        }
+
+        page.start()
+    })
+</script>

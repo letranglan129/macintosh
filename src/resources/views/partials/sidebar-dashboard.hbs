@@ -1,0 +1,36 @@
+<div id="sidebar">
+    <div class="container gx-3">
+        <aside>
+            <div class="sidebar-category">
+                <ul class="category-list">
+                    <li class="category-item">
+                        <a href="/dashboard" class="caption-link">
+                            <i class="bi bi-x-diamond-fill"></i> Quản lí App
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="/dashboard/news" class="caption-link">
+                            <i class="bi bi-newspaper"></i> Quản lí tin tức
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="/game" class="caption-link">
+                            <i class="bi bi-people-fill"></i> Quản lí người dùng
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var link = document.querySelectorAll('.category-list .link')
+        link.forEach(element => {
+            if (element.pathname == window.location.pathname) {
+                element.closest('li').classList.add('active')
+                return
+            }
+        })
+    })
+</script>

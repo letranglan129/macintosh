@@ -1,0 +1,113 @@
+<section id="category">
+    <div class="container g-3">
+        <div class="row">
+            <div class="col-12 mb-3 mb-md-0">
+                <div class="d-flex align-items-center h-100">
+                    {{{renderTitleCategory types path}}}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="games-new mb-4">
+
+                    {{{renderCard app}}}
+
+                </div>
+            </div>
+             
+
+            <div class="text-center my-3 load-more-wrap">
+                <button class="btn px-5 py-2" id="load-more">Xem thêm</button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+    var socket = io()
+    var loadMoreWrap = document.querySelector('.load-more-wrap')
+    var loadMoreBtn = document.querySelector('#load-more')
+    var playMoreList = document.querySelector('.play-more-list')
+    var amountNewsOnPage = document.querySelectorAll('#category .card.card-pic').length
+    var countExist = {{{returnValue countExist}}}
+    var types = {{{returnValue types.title}}}
+
+        
+        
+    async function fetchText() {
+        let response = await fetch('/api/type-game');
+        return data = await response.json();
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        var typeGame = await fetchText()
+
+        const page = {
+            loadMoreHandle() {
+                loadMoreBtn.addEventListener('click', function () {
+                    loadMoreBtn.innerHTML = `<div class="spinner-border text-dark" role="status"></div>`
+                    socket.emit('load-next-game', amountNewsOnPage, {keyword: types})
+                })
+            },
+
+            getSlug (array, search) {
+                return array.find(element => element.type === search)
+            },
+
+            formatTime (string) {
+                var date = new Date(string)
+                return date.toLocaleDateString()
+            },
+
+            renderTypeGameCard(typeArray) {
+                var _this = this
+                return typeArray.map(element => `<a href="/game/type${_this.getSlug(typeGame, element).slug}" class="btn type-game-link">${element}</a>`).join('')
+            },
+
+            renderResult() {
+                var _this = this
+                socket.on('result-next-game', news => {
+                    amountNewsOnPage += 9
+                    var htmls = news.map(element => ` <div class="card card-pic h-100 d-flex">
+                                                        <div class="card-img">
+                                                            <a href="/app/${element.slug}" class="card-img-link">
+                                                                <img loading="lazy" src="${element.img}" />
+                                                            </a>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="type-game">${_this.renderTypeGameCard(element.typeGame)}</div>
+                                                            <div class="name-game">
+                                                                <a href="${element.name}" class="card-title text-name fs-small">${element.name}</a>
+                                                            </div>
+                                                            <div class="info">
+                                                                <span class="debut">Ra mắt: ${_this.formatTime(element.createdAt)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>`)
+                    htmls = htmls.join('')
+
+                    // add to DOM
+                    playMoreList.insertAdjacentHTML('beforeend', htmls)
+                    loadMoreBtn.innerHTML = `Xem thêm`
+                    _this.toggleLoadMoreBtn()
+                })
+            },
+
+            toggleLoadMoreBtn() {
+                if(typeof countExist === "object" || amountNewsOnPage - countExist >= 0) {
+                    document.querySelector('.load-more-wrap').classList.add('d-none')
+                }
+            },
+
+            start() {
+                this.toggleLoadMoreBtn()
+                this.loadMoreHandle()
+                this.renderResult()
+            },
+        }
+
+        page.start()
+    })
+
+</script>

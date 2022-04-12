@@ -1,0 +1,247 @@
+<section class="search-list">
+    <div class="container g-3">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="d-flex align-items-baseline mb-lg-4 mb-3">
+                    <h4 class="topic-title fw-bold m-0 me-3">Danh sách tìm kiếm</h4>
+                    <p class="m-0"><span id="count-search">{{countActive}}</span> kết quả</p>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="search-tab">
+                    <a data-content="search-app-tab-content" data-type="app" class="search-app tab detail-heading px-4 py-2">Phần mềm</a>
+                    <a data-content="search-news-tab-content" data-type="news" class="search-news tab detail-heading px-4 py-2">Tin tức</a>
+                    <span class="line"></span>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="apps-list shadow mt-5">
+                    {{#if isHaveApp}}
+                    <div class="search-app-tab-content">
+                        <div class="row gx-md-3 g-2 p-lg-4 p-2 pt-0">
+                            {{#each app}}
+                            <div class="col-lg-4 col-sm-6 col-12">
+                                <div class="app-item">
+                                    <div class="app-link">
+                                        <a href="/app/{{this.slug}}" class="app-image">
+                                            <img loading="lazy" src="{{this.img}}" />
+                                        </a>
+                                        <div class="app-text">
+                                            <a href="/app/{{this.slug}}" class="card-title text-name">{{this.name}}</a>
+                                            <p class="app-text-type">{{this.type}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="app-button">
+                                        <a href="/app/{{this.slug}}" type="button" class="btn">Chi tiết</a>
+                                        <p class="app-price">{{showPrice this.price}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="pagination-more d-flex align-items-center justify-content-end me-4 pb-lg-4 pb-2">
+                            {{{paginationHandle currentPage pages pagination.showPercent _sort}}}
+                        </div>
+                    </div>
+                    {{else}}    
+                    <div class="text-center search-app-tab-content">
+                        <img loading="lazy" src="/img/no-result.png" class="my-3" style="max-width: 400px;" alt="">
+                        <p class="py-3">Không có kết quả tìm kiếm nào trùng với từ khóa. ĐCM nhập từ nào có coi!!!</p>
+                    </div>
+                    {{/if}}
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    var socket = io()
+    var searchTab = document.querySelector('.search-tab')
+    var line = searchTab.querySelector('.line')
+    var tab = searchTab.querySelectorAll('.tab')
+    var countSearch = document.querySelector('#count-search')
+    var keyword = {{{returnValue keyword}}}
+    var isHaveApp = {{{ returnValue isHaveApp}}}
+    var countApp = {{{ returnValue countActive}}}
+    var lengthNews = 0
+    var typeTab
+    var countObj = {
+        app: Object.keys(countApp).length == 0 ? 0 : countApp,
+        news: 0,
+    }
+
+    const page = {
+        formatTime (string) {
+            var date = new Date(string)
+            return date.toLocaleDateString()
+        },
+
+        formatDescNews(string) {
+            return string.split(/<[^>]+>/g).join('')
+        },
+        setIsHaveApp() {
+            if(Object.keys(isHaveApp).length == 0)
+                isHaveApp = 0
+        },
+
+        hiddenTab(tab) {
+            tab.forEach(element => {
+                var classEl = document.querySelector(`.${element.dataset.content}`)
+                classEl ? classEl?.classList.add('d-none') : null
+            })
+        },
+
+        tabChange() {
+            var _this = this
+            tab.forEach(el => {
+                el.onclick = function (e) {
+                    _this.hiddenTab(tab)
+                    var classContent = e.target.dataset.content
+                    typeTab = e.target.dataset.type
+                    var contentElement = document.querySelector(`.${classContent}`)
+
+                    if(contentElement == null) {
+                        socket.emit('get-search-element', {
+                            keyword: keyword,
+                            type: typeTab,
+                            length: lengthNews,
+                        })
+                    } else {
+                        countSearch.textContent = countObj[typeTab]
+                        contentElement.classList.remove('d-none')
+                    }
+                    
+                    line.style.left = e.target.offsetLeft + 'px'
+                    line.style.width = e.target.offsetWidth + 'px'
+                }
+            })
+        },
+
+        renderSearchResult() {
+            var _this = this
+            socket.on('send-search-result', data => {
+                lengthNews += data.length
+                var htmls
+
+                if(data.news.length == 0) {
+                    htmls = `<div class="text-center search-news-tab-content">
+                                <img loading="lazy" src="/img/no-result.png" class="my-3" style="max-width: 400px;" alt="">
+                                <p class="py-3">Không có kết quả tìm kiếm nào trùng với từ khóa. ĐCM nhập từ nào có coi!!!</p>
+                            </div>`
+                    document.querySelector('.apps-list').insertAdjacentHTML('beforeend', htmls)
+                }
+                
+                var temp = data.news.map(element => {
+                    return `<div class="col col-lg-4 col-sm-6 col-12 gx-3 gx-lg-4 mb-3">
+                                <div class="card card-pic h-100 shadow-lg">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card-img">
+                                                <a href="/news/${element.slug}" class="card-img-link rounded-bottom-0">
+                                                    <img loading="lazy" src="${element.img}"
+                                                        class="card-img-top rounded-0 nohover">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <a href="/news/${element.slug}" class="card-title text-name">
+                                                    ${element.titleNews}
+                                                </a>
+                                                <div class="info justify-content-start mb-3">
+                                                    <div class="author">
+                                                        <div class="avatar">
+                                                            <img loading="lazy" src="${element.user.avatar}"
+                                                                width="40px" class="rounded-circle">
+                                                        </div>
+                                                        <div class="">
+                                                            <div class="name">${element.user.name}</div>
+                                                            <div class="debut">${_this.formatTime(element.createdAt)}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-text text-truncate-lines" style="--line: 3">
+                                                    ${_this.formatDescNews(element.desc)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                }).join('')
+                
+                
+                if(!document.querySelector(`.search-${data.type}-tab-content`)) {
+                    htmls = `<div class="search-${data.type}-tab-content">
+                                <div class="row gx-md-3 g-2 p-lg-4 p-2 pt-0">${temp}</div>
+
+                                <div class="text-center py-3 load-more-wrap">
+                                    <button class="btn px-5 py-2" id="load-more">Xem thêm</button>
+                                </div>
+                            </div>`
+                    document.querySelector('.apps-list').insertAdjacentHTML('beforeend', htmls)
+                } else {
+                    document.querySelector(`.search-${data.type}-tab-content .row`).insertAdjacentHTML('beforeend', temp)
+                }
+
+                var loadMoreBtn = document.querySelector('#load-more')
+                loadMoreBtn.innerHTML = `Xem thêm`
+
+                countSearch.textContent = data.count
+                countObj.news = parseInt(data.count)
+
+                _this.loadMoreHandle()
+                _this.toggleLoadMoreBtn()
+            })
+        },
+
+        loadMoreHandle() {
+            var loadMoreBtn = document.querySelector('#load-more')
+            loadMoreBtn.onclick = function () {
+                loadMoreBtn.innerHTML = `<div class="spinner-border text-dark" role="status"></div>`
+                socket.emit('get-search-element', {
+                    keyword: keyword,
+                    type: typeTab,
+                    length: lengthNews,
+                })
+            }
+        },
+
+        toggleLoadMoreBtn() {
+            //console.log(lengthNews, countObj.news,lengthNews - countObj.news >= 0)
+            if(lengthNews - countObj.news >= 0) {
+                document.querySelector('.load-more-wrap').classList.add('d-none')
+            }
+        },
+
+        start() {
+            //set default is first tab
+            line.style.width = tab[0].offsetWidth + 'px'
+
+            this.setIsHaveApp()
+            this.tabChange()
+            this.renderSearchResult()
+            
+        }
+    }
+    page.start()
+
+
+</script>
+
+
+
+
+
+
+
+

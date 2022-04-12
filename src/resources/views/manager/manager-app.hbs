@@ -1,0 +1,500 @@
+<section class="pb-0">
+    <div class="container g-3">
+        <div id="manager-app" class="mb-0">
+            
+            <div class="title">
+                <i class="bi bi-columns-gap"></i>
+                Quản lí app
+            </div>
+            <hr class="my-3" />
+            <div class="create mb-1 d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <a href="/dashboard/app/create" class="btn btn-sm btn-primary mb-2 rounded-3" title="Tạo mới">Tạo mới</a>
+                    <a href="/dashboard/app/recycle" class="btn btn-sm btn-danger mb-2 rounded-3 btn-trash" title="Vào thùng rác">Thùng rác<span>{{countDeleted}}</span></a>
+                </div>
+                <div class="d-flex align-items-center justify-content-between col-12 col-md-8">
+                    <div class="record d-flex align-items-center mb-2 me-4"  style="height:30px" >
+                        <span style="white-space: nowrap" class="me-2">Mục trên trang: </span>
+                        <form method="GET" id="show-percent-form">
+                            <select name="percent" class="form-select form-select-sm" id="show-percent">
+                                {{{itemPerPage pagination.showPercent}}}
+                            </select>
+                        </form>
+                    </div>
+                    <div class="search mb-2 ms-auto">
+                        <form class="row g-0">
+                            <div class="col-auto">
+                                <label for="searchInput" class="visually-hidden">Tìm kiếm...</label>
+                                <input type="text" name="keyword" style="height:30px" class="form-control form-control-sm" id="searchInput" placeholder="Tìm kiếm..." />
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" style="height:30px" class="btn btn-sm btn-primary m-0"><i class="bi bi-search m-0"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <form action="/dashboard/app/handle-action-form" method="POST">
+                <div class="d-flex align-items-center justify-content-between flex-wrap my-3">
+                    <div class="d-flex align-items-center">
+                        <select name="action" id="select-action" class="form-select form-select-sm me-3" style="width: 240px;" required>
+                            <option value="">-- Hành động --</option>
+                            <option value="delete">Xóa</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary m-0 disabled" id="submit-action-btn">Thực hiện</button>
+                    </div>
+                    <div class="my-2 my-md-0">
+                        <input type="checkbox" class="form-check-input" role="button" id="horizontal-table">
+                        Xem với chế độ ngang <i class="bi bi-info-circle-fill text-primary" role="button" title="Chỉ hoạt động tốt với các thiết bị màn hình nhỏ!!!"></i>
+                    </div>
+                </div>
+                <div class="" style="overflow-x:auto; height: 550px" >
+                    <table class="table table-striped" id="table">
+                        <thead class="sticky-top">
+                            <tr>
+                                <th><input type="checkbox" class="form-check-input" id="checkAll"></th>
+                                <th scope="col" name="data-name">
+                                    Tên
+                                    {{{sort 'name' _sort pagination.showPercent}}} 
+                                </th>
+                                <th scope="col" name="data-type">
+                                    Loại
+                                    {{{sort 'type' _sort pagination.showPercent}}} 
+                                </th>
+                                <th scope="col" name="data-category" id="category" class="position-relative">
+                                    Category
+                                    
+                                    <div class="position-absolute fw-normal" id="category-list">
+                                        <ul class="list-group">
+                                            <li class="list-group-item list-group-title">
+                                            <b>Kiểu</b>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex">
+                                                    <div class="d-inline-block w-50">
+                                                        <input class="form-check-input me-1" role="button" id="type-filter-or" name="type-filter" type="radio" value="or">
+                                                        <label for="type-filter-or" role="button">OR</label>
+                                                    </div>
+                                                    <div class="d-inline-block w-50">
+                                                        <input class="form-check-input me-1" role="button" id="type-filter-and" name="type-filter" type="radio" value="and">
+                                                        <label for="type-filter-and" role="button">AND</label>
+                                                    </div>
+                                                </div>
+                                                <p class="text-danger mb-0 my-2 d-none form-message">Vui lòng chọn kiểu lọc!!!</p>
+                                            </li>
+                                            <li class="list-group-item list-group-title">
+                                            <b>Trường</b>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="d-flex flex-wrap">
+                                                    
+                                                    <div class="d-inline-block w-50">
+                                                        <input class="form-check-input me-1" role="button" id="category-all-filter" type="checkbox" name="check-all-filter" value="all">
+                                                        <label for="category-all-filter" role="button">Tất cả</label>
+                                                    </div>
+
+                                                    {{{renderFilterItem types}}}
+                                                    
+                                                </div>
+                                                <p class="text-danger mb-0 my-2 d-none form-message">Vui lòng chọn giá trị lọc!!!</p>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div class="d-flex">
+                                            <div class="btn btn-danger w-50 rounded-0" id="filter-btn">Lọc</div>
+                                            <div class="btn btn-primary w-50 disabled rounded-0" id="cancel-filter-btn">Hủy lọc</div>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th scope="col" name="data-last-update">
+                                    Cập nhật
+                                    {{{sort 'updatedAt' _sort pagination.showPercent}}} 
+                                </th>
+                                <th scope="col" name="data-action">Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="table-data-body">
+                            {{#each app}}
+                                <tr>
+                                    <td><input type="checkbox" name="checkedList[]" class="form-check-input checkbox-item" value="{{this._id}}"></td>
+                                    <td>
+                                        <p class="mb-0">{{this.name}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">{{this.type}}</p>
+                                    </td>
+                                    <td style="font-size: 14px;width: 20%;">
+                                        {{#each this.categoryType}}<span class="d-inline-block bg-primary text-white rounded-2 p-1 my-1 me-1"><p class="mb-0">{{this}}</p></span>{{/each}}
+                                    </td>
+                                    <td><p class="mb-0">{{{formatTime this.updatedAt}}}</p></td>
+                                    <td>
+                                        <a class="btn btn-primary" href="/dashboard/app/{{this._id}}/edit"><i
+                                                class="bi bi-pencil-square" title="Chỉnh sửa"></i></a>
+                                        <a class="btn btn-danger" data-id="{{this._id}}" data-bs-toggle="modal"
+                                            data-bs-target="#modal-delete" title="Xóa"><i class="bi bi-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {{else}}
+                                <td colspan="7" class="text-center">Bạn chưa đăng app nào. <a href="/dashboard/app/create">Nhấp vào đây để tạo app</a></td>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+            {{#if isHadElement}}
+            <div class="pagination-more d-flex align-items-center justify-content-between my-3">
+                {{{showItemForm currentPage pages pagination.showPercent countActive}}}
+
+                {{{paginationHandle currentPage pages pagination.showPercent _sort}}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal-delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Warning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa???</p>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-primary" data-bs-dismiss="modal" id="close-modal-delete">Hủy</a>
+                    <a type="button" class="btn btn-danger" id="btn-delete">Xác nhận</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form name="delete-form" method="POST"></form>
+</section>
+
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toast-message">
+  <div class="toast-header">
+    <img loading="lazy" src="/img/success.jpg" class="toast-img rounded me-2" width="25px">
+    <strong class="me-auto toast-title">Thành công</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" data-bs-target="#toast-message" ></button>
+  </div>
+  <div class="toast-body">
+    Bạn đã xóa thành công!!!
+  </div>
+</div>
+
+<script>
+    var socket = io()
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var modalDelete = document.querySelector('#modal-delete')
+        var deleteBtn = document.querySelector('#btn-delete')
+        var checkboxAll = document.querySelector('#checkAll')
+        var checkboxItem = [...document.querySelectorAll('.checkbox-item')]
+        var deleteForm = document.forms['delete-form'];
+        var selectAction = document.querySelector('#select-action')
+        var submitActionBtn = document.querySelector('#submit-action-btn')
+        var showPercentForm = document.querySelector('#show-percent-form')
+        var showPercent = document.querySelector('#show-percent')
+        var filterBtn = document.querySelector('#filter-btn')
+        var cancelFilterBtn = document.querySelector('#cancel-filter-btn')
+        var categoryAllFilter = document.querySelector('#category-all-filter')
+        var categoryList = document.querySelector('#category-list')
+        var horizontalTableBtn = document.querySelector('#horizontal-table')
+        var table = document.querySelector('#table')
+        var tableDataBody = document.querySelector('#table-data-body')
+        var paginationMore = document.querySelector('.pagination-more')
+        var valueFilter = document.querySelectorAll('[name="value-filter[]"]')
+        var app = {{{ returnValue app}}}
+        var isChecked = false
+        var isFilterFull = false
+        var id
+        var dataTableHtml
+        
+
+        const page = {
+
+            //Toast message
+            effectToast(toastElement, infoToast, status) {
+                toastElement.querySelector('.toast-img').src = infoToast.img || '/img/warning.jpg'
+                toastElement.querySelector('.toast-title').innerText = infoToast.title || 'Cảnh báo'
+                toastElement.querySelector('.toast-img').innerText = infoToast.message || ''
+                var toast = new bootstrap.Toast(toastElement)
+
+                if(status) 
+                    toast.show()
+                else
+                    toast.hide()
+            },
+
+            onSubmitBtn() {
+                var checkboxItemCheck = document.querySelectorAll('.checkbox-item:checked');
+                if(selectAction.value && checkboxItemCheck.length > 0)
+                    submitActionBtn.classList.remove('disabled')
+                else 
+                    submitActionBtn.classList.add('disabled')   
+            },
+
+            checkedFilter(elementArray, condition) {
+                for(let i = 0; i < elementArray.length; i++) {
+                    if(elementArray[i].checked == condition)
+                        return condition
+                }
+                return !condition
+            },
+
+            validateFilter(option) {
+                for(let i = 0; i < option.validateFeild.length; i++) {
+                    if(!this.checkedFilter(option.validateFeild[i], true)) {
+                        option.validateFeild[i][0].closest('.list-group-item')
+                            .querySelector('.form-message')
+                            .classList.remove('d-none')
+                        return false
+                    } else {
+                        option.validateFeild[i][0].closest('.list-group-item')
+                            .querySelector('.form-message')
+                            .classList.add('d-none')
+                    }
+                }
+                return true
+            },
+
+            checkedAll(checkboxAllElement, checkboxItemElement, selectorcheckboxAll, selectorcheckboxItem) {
+                //Handle when change checkboxAll
+                var _this = this
+                checkboxAllElement.onchange = () => {
+                    var isCheckAll = document.querySelector(`${selectorcheckboxAll}:checked`) || false
+                    if (isCheckAll) 
+                        checkboxItemElement.forEach(item => item.checked = true)
+                    
+                    else 
+                        checkboxItemElement.forEach(item =>item.checked = false)
+                    
+                    _this.onSubmitBtn()
+                }   
+                //Handle when change checkbox item
+                checkboxItemElement.forEach(item => {
+                    item.onclick = () => {
+                        var checkboxItemCheck = document.querySelectorAll(`${selectorcheckboxItem}:checked`)
+                        _this.onSubmitBtn()
+                        if (checkboxItemCheck.length === checkboxItemElement.length) 
+                            checkboxAllElement.checked = true
+                        else 
+                            checkboxAllElement.checked = false
+                    }
+                })
+            },
+
+            handleModalDelete() {
+                modalDelete.addEventListener('show.bs.modal', function (e) {
+                    var toastMessage = document.getElementById('toast-message')
+                    var btnDelete = document.getElementById('btn-delete')
+                    var closeModalDelete = document.getElementById('close-modal-delete')
+                    button = e.relatedTarget;
+                    id = button.dataset.id;
+                    
+                    app.splice(app.findIndex(app => app._id == id), 1)
+
+                    btnDelete.onclick = function () {
+                        socket.emit('delete', id)
+                        socket.on('delete-result', data => {
+                            if(data) {
+                                button.closest('tr').remove()
+                                effectToast(
+                                    toastMessage, 
+                                    {
+                                        img: '/img/success.jpg',
+                                        title: 'Thành công',
+                                        message: 'Bạn đã xóa thành công!!!',
+                                    },
+                                    true,
+                                )
+                            }
+                            else {
+                                effectToast(
+                                    toastMessage, 
+                                    {
+                                        img: '/img/failed.jpg',
+                                        title: 'Thất bại',
+                                        message: 'Xóa không thành công!!!',
+                                    },
+                                    true,
+                                )
+                            }
+                        })
+                        closeModalDelete.click()
+                    }
+
+                })
+            },
+
+            showPercentChange() {
+                showPercent.onchange = function () {
+                    showPercentForm.action =`?percent=${showPercent.value}`
+                    console.log(showPercentForm.action)
+                    showPercentForm.submit()
+                }
+            },
+
+            //Post value filter
+            handleFilterChange() {
+                var _this = this
+                filterBtn.onclick = function() {
+                    var categoryFilterInput = categoryList.querySelectorAll('input')
+                    var typeFilterCheckbox = categoryList.querySelectorAll('[name="type-filter"]')
+                    var valueFilterCheckbox = categoryList.querySelectorAll('[name="value-filter[]"]')
+
+                    var filterResult = []
+                    
+                    var option = {
+                        container: categoryList,
+                        validateFeild: [typeFilterCheckbox ,valueFilterCheckbox],
+                    }
+
+                    if(_this.validateFilter(option)) {
+                        valueFilterCheckbox.forEach(element => {
+                            if(element.checked == true)
+                                filterResult.push(element.value)
+                        })
+
+                        tableDataBody.innerHTML = `
+                        <td colspan="7">
+                            <div class="d-flex justify-content-center my-3">
+                                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </td>
+                        `
+
+                        cancelFilterBtn.classList.remove('disabled')
+
+
+                        //isDeleteFilter == true get app deleted
+                        //isDeleteFilter == false get app not delete
+                        socket.emit('filter', { 
+                            filterResult, 
+                            isDeleteFilter: false,
+                            typeFilter: categoryList.querySelector('[name="type-filter"]:checked').value,
+                        })
+
+                    } else {
+                        console.log('Chua dien du')
+                    }
+                }
+            },
+
+            listenFilterResult() {
+                var _this = this
+                socket.on('filter-result', data => {
+                    if(data.length == 0) {
+                        tableDataBody.innerHTML = `
+                        <td colspan="7" class="text-center">
+                            Không tìm thấy kết quả trùng khớp với yêu cầu lọc!!!
+                        </td>
+                        `
+                    } else {
+                        tableDataBody.innerHTML = ''
+                        var filterHtml = data.map(data => {
+                            var categoryHtml = data.categoryType.map(type => 
+                                `<span class="d-inline-block bg-primary text-white rounded-2 p-1 my-1 me-1">${type}</span>`
+                            ).join('')
+
+                            var date = new Date(data.updatedAt).toLocaleDateString()
+
+                            return `<tr>
+                                <td><input type="checkbox" name="checkedList[]" class="form-check-input checkbox-item" value="${data._id}"></td>
+                                <td>${data.name}</td>
+                                <td>${data.type}</td>
+                                <td style="font-size: 14px;width: 20%;">
+                                    ${categoryHtml}
+                                </td>
+                                <td>${date}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="/dashboard/app/${data._id}/edit"><i
+                                            class="bi bi-pencil-square" title="Chỉnh sửa"></i></a>
+                                    <a class="btn btn-danger" data-id="${data._id}" data-bs-toggle="modal"
+                                        data-bs-target="#modal-delete" title="Xóa"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>`
+                        }).join('')
+
+                        paginationMore.classList.add('d-none')
+                        tableDataBody.innerHTML = filterHtml
+
+                        checkboxItem = [...document.querySelectorAll('.checkbox-item')]
+                        _this.checkedAll(checkboxAll, checkboxItem, '#checkAll', '.checkbox-item')
+                    }
+
+                })
+            },
+
+            //No break word in table
+            horizontalTable() {
+                horizontalTableBtn.onclick = function () {
+                    if(this.checked == true) 
+                        table.classList.add('text-nowrap')
+                    else 
+                        table.classList.remove('text-nowrap')
+                }
+            },
+
+            //Cancel filter
+            cancelFilter() {
+                cancelFilterBtn.onclick = function () {
+                    var categoryFilterInput = categoryList.querySelectorAll('input')
+
+                    categoryFilterInput.forEach(element => {
+                        element.checked = false;
+                    })
+
+                    var appHtml = app.map(app => {
+                        var categoryHtml = app.categoryType.map(type => 
+                            `<span class="d-inline-block bg-primary text-white rounded-2 p-1 my-1 me-1">${type}</span>`
+                        ).join('')
+
+                        var date = new Date(app.updatedAt).toLocaleDateString()
+
+                        return `<tr>
+                            <td><input type="checkbox" name="checkedList[]" class="form-check-input checkbox-item" value="${app._id}"></td>
+                            <td>${app.name}</td>
+                            <td>${app.type}</td>
+                            <td style="font-size: 14px;width: 20%;">
+                                ${categoryHtml}
+                            </td>
+                            <td>${date}</td>
+                            <td>
+                                <a class="btn btn-primary" href="/dashboard/app/${app._id}/edit"><i
+                                        class="bi bi-pencil-square" title="Chỉnh sửa"></i></a>
+                                <a class="btn btn-danger" data-id="${app._id}" data-bs-toggle="modal"
+                                    data-bs-target="#modal-delete" title="Xóa"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>`
+                    }).join('')
+                    tableDataBody.innerHTML = appHtml
+                    paginationMore.classList.remove('d-none')
+
+                    checkboxItem = [...document.querySelectorAll('.checkbox-item')]
+                    checkedAll(checkboxAll, checkboxItem, '#checkAll', '.checkbox-item')
+                }
+            },
+
+            start() {
+                this.checkedAll(checkboxAll, checkboxItem, '#checkAll', '.checkbox-item')
+                this.checkedAll(categoryAllFilter, valueFilter, '#category-all-filter', '[name="value-filter[]"]')
+                selectAction.onchange = ()=> onSubmitBtn()
+                this.horizontalTable()
+                this.handleModalDelete()
+                this.handleFilterChange()
+                this.listenFilterResult()
+                this.showPercentChange()
+                this.cancelFilter()
+            }
+
+        }
+        page.start()
+    })
+
+</script>

@@ -1,0 +1,39 @@
+ <div id="sidebar">
+                <div class="container gx-3">
+                    <aside>
+                        <div class="sidebar-category">
+                            <ul class="category-list">
+                                <li class="category-item">
+                                    <a href="/app" class="caption-link link">
+                                        <i class="bi bi-x-diamond-fill"></i> Phần mềm
+                                    </a>
+                                    <ul class="list-type-app">
+                                        <li class="type-item"><a href="/of-mac-m1" class="link">App cho M1</a></li>
+                                        <li class="type-item"><a href="/office" class="link">Văn phòng</a></li>
+                                        <li class="type-item"><a href="/graphics" class="link">Đồ họa</a></li>
+                                        <li class="type-item"><a href="/filmmaking" class="link">Dựng phim</a></li>
+                                        <li class="type-item"><a href="/dev" class="link">Developer</a></li>
+                                        <li class="type-item"><a href="/relax" class="link">Giải trí</a></li>
+                                    </ul>
+                                </li>
+                                <li class="category-item">
+                                    <a href="/game" class="caption-link link">
+                                        <i class="bi bi-puzzle-fill"></i> Game
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var link = document.querySelectorAll('.category-list .link')
+        link.forEach(element => {
+            if(element.pathname == window.location.pathname) {
+                element.closest('li').classList.add('active')
+                return
+            }
+        })
+    })
+</script>

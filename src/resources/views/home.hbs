@@ -1,0 +1,332 @@
+<section class="banner">
+  <div class="container g-3">
+    <div class="row">
+      <div class="col-md-8 mb-3 mb-md-0 col-12">
+        
+        <div class="swiper gx-3">
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <a href="" class="card-link" style="--card-bg: #827cf7;--text-color: #dcdbf3">
+                <div class="card w-100 p-3 pe-0" style="background-image: url(/img/18956231-Converted-1.png)">
+                  <div class="row g-0">
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title mb-3 w-100 text-white fw-bold">Bật
+                          Anywhere, khắc phục lỗi damage, can’t open… by
+                          developer</h5>
+                        <p class="card-text">Thủ thuật cần khi cài ứng dụng từ
+                          bên thứ ba.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="swiper-slide">
+              <a href="" class="card-link" style="--card-bg: #827cf7;--text-color: #dcdbf3">
+                <div class="card w-100 p-3 pe-0" style="background-image: url(/img/21034637-Converted.png)">
+                  <div class="row g-0">
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title mb-3 w-100 text-white fw-bold">Tham gia Macintosh Viet Nam Group</h5>
+                        <p class="card-text">Group nho nhỏ hoạt động trên
+                          Facebook</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+          </div>
+
+            <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+      <div class="col-md-4 mb-3 mb-md-0 col-12">
+        <a href="" class="card-link" style="--card-bg: #fecfd1; --text-color: #5467e7">
+          <div class="card text-white" style="background-image: url(/img/banner-guide.png)">
+            <div class="row g-0">
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title mb-3 w-100 fw-bold">Hướng dẫn cho người
+                    mới bắt đầu</h5>
+                  <p class="card-text">Tìm hiểu thêm</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="update-app">
+  <div class="container g-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+          <h4 class="topic-title fw-bold">Cập nhật mới nhất</h4>
+          <a href="/app" class="show-all">Tất cả</a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="apps-list shadow">
+          <div class="row gx-md-3 g-2 p-lg-4 p-2 pt-0">
+            
+            {{#each app}}
+            <div class="col-lg-4 col-sm-6 col-12">
+              <div class="app-item">
+                <div class="app-link">
+                  <a href="/app/{{this.slug}}" class="app-image">
+                    <img loading="lazy" loading="lazy" src="{{this.img}}" />
+                  </a>
+                  <div class="app-text">
+                    <a href="/app/{{this.slug}}" class="card-title text-name">{{this.name}}</a>
+                    <p class="app-text-type">{{this.type}}</p>
+                  </div>
+                </div>
+                <div class="app-button">
+                  <a href="/app/{{this.slug}}" type="button" class="btn">Chi tiết</a>
+                  <p class="app-price">{{showPrice this.price}}</p>
+                </div>
+              </div>
+            </div>
+            {{/each}}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="group-content">
+  <div class="container g-3">
+    <div id="about-macos" class="g-4">
+      <div class="popular-macos">
+
+        <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+          <h4 class="topic-title fw-bold">Phổ biến cho macOS</h4>
+          <a href="/of-mac-m1" class="show-all">Tất cả</a>
+        </div>
+
+        <div class="card-apps-list">
+          {{#each popularOfMacM1}}
+          <div class="card-app">
+            <div class="card-app-img">
+              <a class="app-image" href="app/{{this.slug}}">
+                <img loading="lazy" loading="lazy" src="{{this.img}}"/>
+              </a>
+              <div class="app-button">
+                <a href="app/{{this.slug}}" type="button" class="btn">Chi tiết</a>
+                <p class="app-price">{{showPrice this.price}}</p>
+              </div>
+            </div>
+            <div class="card-detail">
+              <div class="app-text">
+                <h3><a href="app/{{this.slug}}" class="card-title text-name">{{this.name}}</a></h3>
+                <p class="app-text-type">{{this.type}}</p>
+              </div>
+              <ul class="detail">
+                <li class="detail-item">
+                  <p>Cập nhật: <span>{{this.updateAt}}</span></p>
+                  <p>Tải về: <span>{{this.download}}</span></p>
+                </li>
+                <li class="detail-item">
+                  <p>Kích cỡ: <span>{{this.size}}</span></p>
+                  <p>Thiết bị: <span>{{this.equipment}}</span></p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        {{/each}}
+        </div>
+
+      </div>
+
+      <div class="tutorial-macos">
+        <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+          <h4 class="topic-title fw-bold">Hướng dẫn sử dụng máy Mac</h4>
+          <a href="" class="show-all">Tất cả</a>
+        </div>
+        <a href="" class="card-link" style="--card-bg: #ffec88;">
+          <div class="card text-white"
+            style="background-image: url(/img/Teamwork-and-Startup-illustration-e1619355364403.png)">
+            <div class="card-body">
+              <h5 class="card-title mb-3 w-100 fw-bold">Thủ thuật, kinh nghiệm</h5>
+              <p class="card-text">Và nhiều hơn thế nữa đang chờ bạn</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="app-film-macos">
+        <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+          <h4 class="topic-title fw-bold">App dựng Film</h4>
+          <a href="/filmmaking" class="show-all">Tất cả</a>
+        </div>
+        {{#each appFilmmaking}}
+        <div class="app-item">
+          <div class="app-link">
+            <a href="/app/{{this.slug}}" class="app-image">
+              <img loading="lazy" src="{{this.img}}" />
+            </a>
+            <div class="app-text">
+              <a href="/app/{{this.slug}}" class="card-title text-name">{{this.name}}</a>
+              <p class="app-text-type">{{this.type}}</p>
+            </div>
+          </div>
+          <div class="app-button">
+            <a href="/app/{{this.slug}}" type="button" class="btn">Chi tiết</a>
+            <p class="app-price">{{showPrice this.price}}</p>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="all-tutorial">
+  <div class="container g-3">
+    <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+      <h4 class="topic-title fw-bold">Tổng hợp lỗi và cách cài đặt phần mềm</h4>
+      <a href="" class="show-all">Tất cả</a>
+    </div>
+
+    <div class="tutorial-list">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          
+          {{#each newsRepair}}
+            <div class="swiper-slide h-auto">
+            <div class="card card-pic h-100">
+              <a href="/news/{{this.slug}}" class="card-link">
+                <img loading="lazy" src="{{this.img}}" class="card-img-top"/>
+              </a>
+              <div class="card-body">
+                <a href="/news/{{this.slug}}" class="card-title text-name">
+                  {{this.titleNews}}
+                </a>
+                <p class="card-text app-text-type">Hướng dẫn cài đặt</p>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+          
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="games-new pb-0">
+  <div class="container g-3">
+    <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+      <h4 class="topic-title fw-bold">Game mới</h4>
+      <a href="/game" class="show-all">Tất cả</a>
+    </div>
+
+    {{{renderCard newGame}}}
+
+  </div>
+
+</section>
+
+<section class="play-more">
+  <div class="container g-3">
+
+    <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3">
+      <h4 class="topic-title fw-bold">Game được chơi nhiều</h4>
+      <a href="/game" class="show-all">Tất cả</a>
+    </div>
+
+    <div class="play-more-list g-4">
+
+      {{#each downloadGame}}
+        <div class="card card-pic h-100 d-flex">
+          <div class="card-img">
+            <a href="" class="card-img-link">
+              <img loading="lazy" src="{{this.img}}" />
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="type-game">
+              {{{renderLinkTypeGame typeGame this.typeGame}}}
+            </div>
+            <div class="name-game">
+              <a href="/app/{{this.slug}}" class="card-title text-name fs-small">{{this.name}}</a>
+            </div>
+            <div class="info">
+              <span class="debut">Ra mắt: {{{formatTime this.createdAt}}}</span>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+
+    </div>
+
+  </div>
+</section>
+
+<section class="news">
+  <div class="container g-3">
+
+     {{{renderCardNews news}}} 
+
+  </div>
+</section>
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var swiperBanner = new Swiper('.banner .swiper', {
+    pagination: {
+      el:'.swiper-pagination',
+    }, 
+    speed: 800,
+    spaceBetween: 30, 
+    loop: true, 
+    autoplay: {
+      delay: 1000, disableOnInteraction: false,
+    }, 
+    coverflowEffect: {
+      rotate: 30,
+      slideShadows: false,
+    },
+  }); 
+
+    var swiperBanner = new Swiper('.template-plugin .swiper', { 
+      slidesPerView: 2, 
+      spaceBetween: 15, 
+      speed: 800,
+      breakpoints: { 
+        768: { 
+          slidesPerView: 3, spaceBetween: 30 
+        } 
+      },
+    }); 
+    
+    var swiper = new Swiper('.tutorial-list .swiper', {
+      slidesPerView: 2, 
+      spaceBetween: 15, 
+      speed: 800,
+      breakpoints: { 
+        768: { 
+          slidesPerView: 3, spaceBetween: 30 
+        }
+      },
+    });
+  
+  })
+</script>

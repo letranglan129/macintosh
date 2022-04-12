@@ -1,0 +1,535 @@
+<section id="edit">
+    <div class="container g-3">
+        <div class="title">
+            <a href="/dashboard" class="fs-3 me-3">
+                <i class="bi bi-arrow-left-circle"></i>
+            </a>
+            <i class="bi bi-pencil-square"></i>
+            Chỉnh sửa
+        </div>
+        <hr class="my-4" />
+        <form method="POST" name="edit-form" onsubmit="getContent()"
+            action="/dashboard/app/{{app._id}}/update?_method=PUT" autocomplete="off" enctype="multipart/form-data">
+
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="input-group input-group-sm mb-3">
+                    <label for="name" class="input-group-text">Tên app</label>
+                    <input type="text" class="input-requierd form-control" id="name" name="name" autocomplete="off"
+                        value="{{app.name}}" />
+                    <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+                </div>
+
+                <div class="input-group input-group-sm mb-3  mx-5">
+                    <label for="type" class="input-group-text">Loại</label>
+                    <input type="text" class="input-requierd form-control" id="type" name="type" autocomplete="off"
+                        value="{{app.type}}" />
+                    <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+                </div>
+
+                <div class="input-group input-group-sm mb-3">
+                    <label for="price" class="input-group-text">Giá</label>
+                    <input type="number" class="input-requierd form-control" id="price" name="price" min="0"
+                        autocomplete="off" value="{{app.price}}" />
+                    <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+                </div>
+
+            </div>
+            <div class="input-group input-group-sm mb-3" id="categoryType">
+                <p class="w-100">Category</p>
+                {{{renderCategoryListCreate type}}}
+
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3 d-none" id="type-of-game">
+                <p class="w-100">Thể loại game</p>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input me-1 input-equipment" type="checkbox"
+                        name="category-item-checkboxall" id="check-all-catogery">
+                    <label for="check-all-catogery">Tất cả</label>
+                </div>
+                {{{renderTypeGame typeGames app}}}
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3" id="equipment-list">
+                <p class="w-100">Thiết bị</p>
+                {{{renderEquipment equipmentList app.equipment}}}
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="form-label w-100">App icon</span>
+                <div class="me-4 img-input" id="old-img">
+                    <label for="oldImg" class="form-label w-100 text-truncate">
+                        <img loading="lazy" src="{{app.img}}" alt="" width="120px" height="120px" class="rounded-3">
+                    </label>
+                    <input type="text" class="form-control" id="oldImg" name="oldImg" autocomplete="off"
+                        value="{{app.img}}" hidden />
+                </div>
+                <div class="add-new-img">
+                    <label for="img" class="form-label w-100 text-truncate" style="">
+                        <i class="bi bi-arrow-repeat fs-1"></i>
+                    </label>
+                    <input type="file" class="form-control" id="img" name="img" autocomplete="off"
+                        accept=".png,.jpg,.jpeg" hidden />
+                </div>
+                <button type="button" class="agree-btn btn del-btn my-auto rounded-12px ms-3 d-none">Xác nhận</button>
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="form-label w-100">Swiper image</span>
+                <div class="wrap d-flex flex-wrap" id="wrap-desc-img">
+
+                    {{{renderDescImgEdit app}}}
+
+                    <div class="add-new-img" id="multipleImg">
+                        <label for="descImage" class="form-label w-100" style="">
+                            <i class="bi bi-plus-lg fs-1"></i>
+                        </label>
+                        <input type="file" class="form-control" id="descImage" name="descImage" autocomplete="off"
+                            accept=".png,.jpg,.jpeg" multiple hidden requierd />
+                    </div>
+                </div>
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="input-group input-group-sm mb-3 me-2">
+                    <label for="link" class="input-group-text">Link download</label>
+                    <input type="text" class="input-requierd form-control" id="link" name="link" value="{{app.link}}" />
+                    <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+                </div>
+                <div class="input-group input-group-sm mb-3 ms-2">
+                    <label for="link" class="input-group-text">Kích thước (MB)</label>
+                    <input type="number" class="form-control input-requierd" id="size" name="size" step="0.1"
+                        value="{{app.size}}" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+            </div>
+            <div class="text-format">
+                <input type="color" id="changeColor">
+                <button onclick="document.execCommand('bold', true, '600')" type="button"><i
+                        class="bi bi-type-bold"></i></button>
+                <button onclick="document.execCommand('italic')" type="button"><i
+                        class="bi bi-type-italic"></i></button>
+                <button onclick="document.execCommand('underline')" type="button"><i
+                        class="bi bi-type-underline"></i></button>
+                <button onclick="document.execCommand('insertUnorderedList')" type="button"><i
+                        class="bi bi-list-ul"></i></button>
+                <button onclick="document.execCommand('insertOrderedList')" type="button"><i
+                        class="bi bi-list-ol"></i></button>
+                <button onclick="document.execCommand('indent')" type="button"><i
+                        class="bi bi-text-indent-left"></i></button>
+                <button onclick="document.execCommand('outdent')" type="button"><i
+                        class="bi bi-text-indent-right"></i></button>
+                <button onclick="document.execCommand('justifyLeft')" type="button"><i
+                        class="bi bi-text-left"></i></button>
+                <button onclick="document.execCommand('justifyCenter')" type="button"><i
+                        class="bi bi-text-center"></i></button>
+                <button onclick="document.execCommand('justifyRight')" type="button"><i
+                        class="bi bi-text-right"></i></button>
+                <button onclick="document.execCommand('justifyFull')" type="button"><i
+                        class="bi bi-justify"></i></button>
+                <button onclick="document.execCommand('undo')" type="button"><i
+                        class="bi bi-arrow-counterclockwise"></i></button>
+                <button onclick="document.execCommand('redo')" type="button"><i
+                        class="bi bi-arrow-clockwise"></i></button>
+                <button onclick="addLink()" type="button"><i class="bi bi-link"></i></button>
+                <button onclick="document.execCommand('unlink')" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 1792 1792" width="16">
+                        <path
+                            d="M503 1271l-256 256q-10 9-23 9-12 0-23-9-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23zm169 41v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm-224-224q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm1264 128q0 120-85 203l-147 146q-83 83-203 83-121 0-204-85l-334-335q-21-21-42-56l239-18 273 274q27 27 68 27.5t68-26.5l147-146q28-28 28-67 0-40-28-68l-274-275 18-239q35 21 56 42l336 336q84 86 84 204zm-617-724l-239 18-273-274q-28-28-68-28-39 0-68 27l-147 146q-28 28-28 67 0 40 28 68l274 274-18 240q-35-21-56-42l-336-336q-84-86-84-204 0-120 85-203l147-146q83-83 203-83 121 0 204 85l334 335q21 21 42 56zm633 84q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm-544-544v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm407 151l-256 256q-11 9-23 9t-23-9q-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23z" />
+                    </svg>
+                </button>
+                <button onclick="document.execCommand('formatBlock', false,'h1')" type="button">H1</button>
+                <button onclick="document.execCommand('formatBlock', false,'h2')" type="button">H2</button>
+                <button onclick="document.execCommand('formatBlock', false,'h3')" type="button">H3</button>
+                <button onclick="document.execCommand('formatBlock', false,'h4')" type="button">H4</button>
+                <button onclick="document.execCommand('formatBlock', false,'h5')" type="button">H5</button>
+                <button onclick="document.execCommand('formatBlock', false,'h6')" type="button">H6</button>
+                <button type="button">
+                    <label for="insertImage">
+                        <i class="bi bi-card-image text-dark"></i>
+                    </label>
+                    <input type="file" id="insertImage" hidden>
+                </button>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Mô tả</span>
+                <div class="form-control m-0" contenteditable="true" style="min-height: 200px; padding-bottom: 60px"
+                    id="field-input-desc">
+                    {{{app.desc}}}
+                </div>
+                <textarea id="desc" name="desc" style="display: none;" maxlength="100000000" class="input-requierd"></textarea>
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3">Confirm</button>
+
+        </form>
+    </div>
+
+</section>
+
+
+<script>
+    document.title = `Chỉnh sửa - {{app.name}}`
+
+    function addLink() {
+        var url = prompt('Nhập link cần chèn:', 'http://www.');
+        var selection = document.getSelection();
+        document.execCommand('createLink', true, url);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const socket = io()
+        const changeColor = document.querySelector("#changeColor");
+        const editForm = document.forms['edit-form']
+        const fieldInputDesc = document.querySelector("#field-input-desc")
+        const desc = document.querySelector("#desc")
+        const oldImg = document.querySelector('#oldImg')
+        const newImgInput = document.querySelector('#img')
+        const descImage = document.querySelector('#descImage')
+        const gameCheckbox = document.querySelector('#game-checkbox')
+        const typeOfGame = document.querySelector('#type-of-game')
+        const categoryTypeListCheckboxAll = document.querySelector('#check-all-catogery')
+        const categoryItemCheckbox = document.querySelectorAll('[name="typeGame[]"]')
+        var isValue = false
+
+
+        const page = {
+            
+            changeColor() {
+                changeColor.oninput = function () {
+                    document.execCommand('foreColor', false, this.value)
+                }
+            },
+
+            categoryProgess() {
+                var data = `{{app.categoryType}}`.toString().split(',')
+                var categoryList = editForm.querySelector('#categoryType').querySelectorAll('.form-check')
+
+                categoryList.forEach(element => {
+                    var category = element.querySelector('input').value
+                    if (data.includes(category))
+                        element.querySelector('input').checked = true
+                })
+            },
+
+            deleteImage() {
+                var deleteBtn = editForm.querySelectorAll('.del-btn')
+                deleteBtn.forEach(e => {
+                    e.onclick = function () {
+                        var imgDeleteAddress = e.parentElement.querySelector('input').value
+                        var html = `<input type="text" hidden name="imgDelete[]" value="${imgDeleteAddress}">`
+                        editForm.insertAdjacentHTML('afterbegin', html)
+                        e.parentElement.remove()
+
+                        if (document.querySelector('#old-img') === null)
+                            newImgInput.classList.add('input-requierd')
+
+                        if (!editForm.querySelectorAll('.desc-img').length)
+                            descImage.classList.add('input-requierd')
+                    }
+                })
+            },
+
+            replaceImg() {
+                var content
+                newImgInput.onchange = () => {
+                    var label = document.querySelector('[for="img"]')
+                    var agreeBtn = document.querySelector('.agree-btn')
+                    var img = document.createElement('img')
+                    var file = newImgInput.files[0]
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        img.src = e.target.result
+                        img.style.maxWidth = '100%'
+                    }
+                    try {
+                        reader.readAsDataURL(file)
+                        label.innerHTML = ''
+                        label.appendChild(img)
+                        agreeBtn.classList.remove('d-none')
+                    }
+                    catch (errors) {
+                        label.innerHTML = `<i class="bi bi-arrow-repeat fs-1"></i>`
+                        agreeBtn.classList.remove('d-none')
+                    }
+
+                    agreeBtn.onclick = function () {
+                        var oldImgChange = document.querySelector('[for="oldImg"] img')
+                        var html = `<input type="text" hidden name="imgDelete[]" value="${oldImg.value}">`
+                        editForm.insertAdjacentHTML('afterbegin', html)
+                        oldImgChange.src = img.src
+                        label.innerHTML = `<i class="bi bi-arrow-repeat fs-1"></i>`
+                        agreeBtn.classList.remove('d-none')
+                    }
+                }
+            },
+
+            addImg() {
+                descImage.onchange = () => {
+                    editForm.querySelector('label[for="descImage"]').innerHTML = `${descImage.files.length} tệp hình ảnh`;
+                }
+            },
+
+            //Validate form
+            checkboxValid(container, arrayCheckbox) {
+                var isChecked = false
+                var arrResult = []
+                arrayCheckbox.forEach(element => {
+                    const checkbox = container.querySelectorAll(`${element} .input-equipment`)
+
+                    if (checkbox.length == 0)
+                        return
+
+                    for (let item of checkbox) {
+                        if (item.checked) {
+                            isChecked = true
+                            break;
+                        } else {
+                            isChecked = false
+                        }
+                    }
+
+                    if (!isChecked) {
+                        var inputEquipment = container.querySelector(`${element} .input-equipment`)
+                        var inputGroup = getParent(inputEquipment, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.remove('d-none')
+                    } else {
+                        var inputEquipment = container.querySelector(`${element} .input-equipment`)
+                        var inputGroup = getParent(inputEquipment, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                    arrResult.push(isChecked)
+                })
+
+                return arrResult.includes(false)
+            },
+
+            inputValid(intputElements) {
+                var isValue = false
+                for (let item of intputElements) {
+                    if (item.value)
+                        isValue = true
+                    else {
+                        isValue = false
+                        break;
+                    }
+                }
+
+                if (!isValue) {
+                    for (let item of intputElements) {
+                        var inputGroup = getParent(item, '.input-group')
+                        if (!item.value) {
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        }
+                        else {
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+                        }
+                    }
+                }
+                return isValue
+            },
+
+            //Validate form
+            submitForm() {
+                var _this = this
+                editForm.onsubmit = function (e) {
+                    var field = editForm.querySelectorAll('.input-requierd, textarea')
+                    var checkboxValidate = ['#categoryType', '#type-of-game:not(.d-none)', '#equipment-list']
+                    var checkbox = editForm.querySelectorAll('.input-equipment')
+
+                    var isInputFull = _this.inputValid(field)
+                    var isChecked = _this.checkboxValid(editForm, checkboxValidate)
+
+                    if (!isInputFull || isChecked) {
+                        window.scrollTo(0, document.querySelector('.input-message:not(d-none)').offsetTop)
+                        _this.handleValidInput()
+                        e.preventDefault()
+                    } else {
+                        this.submit()
+                    }
+                }
+            },
+
+            //Handle when click submit 
+            handleValidInput() {
+                var messages = editForm.querySelectorAll('.input-message')
+                var inputEquipment = editForm.querySelectorAll('.input-equipment')
+                var inputArr = []
+                var tmpArray = []
+
+                //Get input message error
+                messages.forEach(message => {
+                    if (!message.classList.contains('d-none'))
+                        inputArr.push([...message.closest('.input-group').querySelectorAll('input, #field-input-desc')])
+                })
+
+                //Flatten Array
+                inputArr.forEach(element => element.forEach(element => tmpArray.push(element)))
+
+                //Handle onput and hidden message
+                tmpArray.forEach(element => {
+                    element.oninput = function () {
+                        element.closest('.input-group')
+                            .querySelector('.input-message')
+                            .classList.add('d-none')
+                    }
+                })
+
+                inputEquipment.forEach(function (el) {
+                    el.onchange = function () {
+                        var inputGroup = getParent(el, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+            //Handle when blur or typing input
+            handleBlurInput() {
+                var inputRequierd = editForm.querySelectorAll('input[type="text"], input[type="number"]')
+
+                fieldInputDesc.onblur = function () {
+                    var inputGroup = getParent(fieldInputDesc, '.input-group')
+                    if (!fieldInputDesc.innerHTML)
+                        inputGroup.querySelector('.input-message').classList.remove('d-none')
+                    else
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                }
+
+                inputRequierd.forEach(function (el) {
+                    var inputGroup = getParent(el, '.input-group')
+                    el.onblur = function () {
+                        if (!el.value)
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        else
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+
+                    }
+                    el.oninput = function () {
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+            checkedAll(checkboxAllElement, checkboxItemElement, selectorcheckboxAll, selectorcheckboxItem) {
+                var checkboxItemCheck = document.querySelectorAll(`${selectorcheckboxItem}:checked`)
+
+                //Handle when change checkboxAll
+                checkboxAllElement.onchange = () => {
+                    var isCheckAll = document.querySelector(`${selectorcheckboxAll}:checked`) || false
+                    if (isCheckAll)
+                        checkboxItemElement.forEach(item => item.checked = true)
+                    else
+                        checkboxItemElement.forEach(item => item.checked = false)
+                }
+                //Handle when change checkbox item
+                checkboxItemElement.forEach(item => {
+                    item.onclick = () => {
+                        var checkboxItemCheck = document.querySelectorAll(`${selectorcheckboxItem}:checked`)
+                        if (checkboxItemCheck.length === checkboxItemElement.length)
+                            checkboxAllElement.checked = true
+                        else
+                            checkboxAllElement.checked = false
+                    }
+                })
+
+                if (checkboxItemElement.length == checkboxItemCheck.length)
+                    checkboxAllElement.checked = true
+                else
+                    checkboxAllElement.checked = false
+
+            },
+
+            //Handle when input desc
+            getContent() {
+                desc.innerHTML = fieldInputDesc.innerHTML
+            },
+
+            //Handle priview image when insert image
+            insertImage() {
+                var input = document.querySelector('#insertImage')
+                input.onchange = function () {
+                    var file = input.files[0]
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        e.target.result
+                        socket.emit('send-img', {
+                            imgBase64: e.target.result,
+                            name: file.name,
+                        })
+                    }
+                    reader.readAsDataURL(file)
+                }
+            },
+
+            getImg() {
+                socket.on('get-img', path => {
+                    var img = document.createElement('img')
+                    var p = document.createElement('p')
+                    p.style.textAlign = 'center'
+                    img.style.maxWidth = '75%'
+                    img.src = path
+                    p.append(img)
+                    fieldInputDesc.append(p)
+                })
+            },
+
+            toggleGameCheckbox() {
+                gameCheckbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        typeOfGame.classList.remove('d-none')
+                        document.querySelector('#type').value = "Trò chơi điện tử"
+                        document.querySelector('#type').setAttribute('disabled', 'disabled')
+                    } else {
+                        typeOfGame.classList.add('d-none')
+                        document.querySelector('#type').removeAttribute('disabled')
+                    }
+                })
+            },
+
+            inputDescChange() {
+                fieldInputDesc.addEventListener('keyup', this.getContent)
+                fieldInputDesc.addEventListener('focus', function () {
+                    document.execCommand("defaultParagraphSeparator", false, "p")
+                })
+                fieldInputDesc.addEventListener('paste', this.getContent)
+            },
+
+            defaultTypeGame() {
+                if (gameCheckbox.checked) {
+                    typeOfGame.classList.remove('d-none')
+                    document.querySelector('#type').value = "Trò chơi điện tử"
+                    document.querySelector('#type').setAttribute('disabled', 'disabled')
+                }
+            },
+
+            start() {
+                this.checkedAll(categoryTypeListCheckboxAll, categoryItemCheckbox, '#check-all-catogery', '[name="typeGame[]"]')
+                this.defaultTypeGame()
+                document.execCommand("defaultParagraphSeparator", false, "p")
+                this.changeColor()
+                this.categoryProgess()
+                this.deleteImage()
+                this.replaceImg()
+                this.addImg()
+                this.submitForm()
+                this.handleBlurInput()
+                this.getContent()
+                this.insertImage()
+                this.getImg()
+                this.toggleGameCheckbox()
+                this.inputDescChange()
+            }
+
+        }
+
+        page.start()
+
+    })
+
+</script>

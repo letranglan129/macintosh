@@ -1,0 +1,382 @@
+<section id="edit">
+    <div class="container g-3">
+        <div class="title">
+            <a href="/dashboard/news" class="fs-3 me-3">
+                <i class="bi bi-arrow-left-circle"></i>
+            </a>
+            <i class="bi bi-file-earmark-plus"></i>
+            Tạo bài viết
+        </div>
+        <hr class="my-4" />
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </symbol>
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </symbol>
+        </svg>
+        {{#if Err}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+
+        <form method="POST" name="edit-form" autocomplete="off"
+            enctype="multipart/form-data">
+            {{#with news}}
+            <input type="text" value="{{id}}" name="id" readonly hidden>
+            <div class="d-flex align-items-center justify-content-center flex-column">
+                <div class="input-group input-group-sm mb-3">
+                    <label for="name" class="input-group-text">Tiêu đề bài viết</label>
+                    <input type="text" class="form-control input-requierd" id="titleNews" value="{{titleNews}}" name="titleNews" autocomplete="off" />
+                    <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+                </div>
+            </div>
+
+            
+            <div class="input-group input-group-sm mb-3">
+                <label for="name" class="input-group-text">Tag</label>
+                <input type="text" class="form-control input-requierd" value="{{tag}}" name="tag" autocomplete="off" />
+                <p class="w-100 lh-lg mb-0"><i class="bi bi-info-circle-fill" style="color: var(--bs-primary)"></i> <small class="mb-0">Nhập nhiều tag cách nhau bởi dấu phẩy ","</small></p>
+                <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3" id="categoryType">
+                <p class="w-100">Loại</p>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input input-equipment" {{{checkedItem type 'repair-install'}}} type="radio" id="repair-install-radio" value="repair-install" name="type">
+                    <label class="form-check-label" for="repair-install-radio">Sửa chữa và cài đặt</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input input-equipment" {{{checkedItem type 'other'}}} type="radio" id="other-radio" value="other" name="type">
+                    <label class="form-check-label" for="other-radio">Khác</label>
+                </div>
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="form-label w-100">Hình ảnh đại diện</span>
+                <div class="me-4 img-input" id="old-img">
+                    <label for="oldImg" class="form-label w-100 text-truncate">
+                        <img loading="lazy" src="{{img}}" alt="" width="120px" height="120px"
+                            class="rounded-3">
+                    </label>
+                    <input type="text" class="form-control" id="oldImg" name="oldImg" autocomplete="off"
+                        value="{{img}}" hidden />
+                </div>
+                <div class="add-new-img">
+                    <label for="img" class="form-label w-100 text-truncate" style="">
+                        <i class="bi bi-arrow-repeat fs-1"></i>
+                    </label>
+                    <input type="file" class="form-control" id="img" name="img" autocomplete="off"
+                        accept=".png,.jpg,.jpeg" hidden />
+                </div>
+                <button type="button" class="agree-btn btn del-btn my-auto rounded-12px ms-3 d-none">Xác nhận</button>
+                <p class="d-none text-danger w-100 input-message">Vui lòng điền trường này</p>
+            </div>
+
+            <div class="text-format d-flex">
+                <input type="color" id="changeColor">
+                <button onclick="document.execCommand('bold', true, '600')" type="button"><i
+                        class="bi bi-type-bold"></i></button>
+                <button onclick="document.execCommand('italic')" type="button"><i
+                        class="bi bi-type-italic"></i></button>
+                <button onclick="document.execCommand('underline')" type="button"><i
+                        class="bi bi-type-underline"></i></button>
+                <button onclick="document.execCommand('insertUnorderedList')" type="button"><i
+                        class="bi bi-list-ul"></i></button>
+                <button onclick="document.execCommand('insertOrderedList')" type="button"><i
+                        class="bi bi-list-ol"></i></button>
+                <button onclick="document.execCommand('indent')" type="button"><i
+                        class="bi bi-text-indent-left"></i></button>
+                <button onclick="document.execCommand('outdent')" type="button"><i
+                        class="bi bi-text-indent-right"></i></button>
+                <button onclick="document.execCommand('justifyLeft')" type="button"><i
+                        class="bi bi-text-left"></i></button>
+                <button onclick="document.execCommand('justifyCenter')" type="button"><i
+                        class="bi bi-text-center"></i></button>
+                <button onclick="document.execCommand('justifyRight')" type="button"><i
+                        class="bi bi-text-right"></i></button>
+                <button onclick="document.execCommand('justifyFull')" type="button"><i
+                        class="bi bi-justify"></i></button>
+                <button onclick="document.execCommand('undo')" type="button"><i
+                        class="bi bi-arrow-counterclockwise"></i></button>
+                <button onclick="document.execCommand('redo')" type="button"><i
+                        class="bi bi-arrow-clockwise"></i></button>
+                <button onclick="addLink()" type="button"><i class="bi bi-link"></i></button>
+                <button onclick="document.execCommand('unlink')" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 1792 1792" width="16">
+                        <path
+                            d="M503 1271l-256 256q-10 9-23 9-12 0-23-9-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23zm169 41v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm-224-224q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm1264 128q0 120-85 203l-147 146q-83 83-203 83-121 0-204-85l-334-335q-21-21-42-56l239-18 273 274q27 27 68 27.5t68-26.5l147-146q28-28 28-67 0-40-28-68l-274-275 18-239q35 21 56 42l336 336q84 86 84 204zm-617-724l-239 18-273-274q-28-28-68-28-39 0-68 27l-147 146q-28 28-28 67 0 40 28 68l274 274-18 240q-35-21-56-42l-336-336q-84-86-84-204 0-120 85-203l147-146q83-83 203-83 121 0 204 85l334 335q21 21 42 56zm633 84q0 14-9 23t-23 9h-320q-14 0-23-9t-9-23 9-23 23-9h320q14 0 23 9t9 23zm-544-544v320q0 14-9 23t-23 9-23-9-9-23v-320q0-14 9-23t23-9 23 9 9 23zm407 151l-256 256q-11 9-23 9t-23-9q-9-10-9-23t9-23l256-256q10-9 23-9t23 9q9 10 9 23t-9 23z" />
+                    </svg>
+                </button>
+                <button onclick="document.execCommand('formatBlock', false,'h1')" type="button">H1</button>
+                <button onclick="document.execCommand('formatBlock', false,'h2')" type="button">H2</button>
+                <button onclick="document.execCommand('formatBlock', false,'h3')" type="button">H3</button>
+                <button onclick="document.execCommand('formatBlock', false,'h4')" type="button">H4</button>
+                <button onclick="document.execCommand('formatBlock', false,'h5')" type="button">H5</button>
+                <button onclick="document.execCommand('formatBlock', false,'h6')" type="button">H6</button>
+                <button type="button">
+                    <label for="insertImage">
+                        <i class="bi bi-card-image text-dark"></i>
+                    </label>
+                    <input type="file" id="insertImage" hidden>
+                </button>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Mô tả</span>
+                <div class="form-control m-0 text-dark" style="min-height: 200px; padding-bottom: 60px"
+                    contenteditable="true" id="field-input-desc">
+                    {{{desc}}}
+                </div>
+                <textarea class="input-requierd" id="desc" name="desc" style="display: none;"></textarea>
+                <p class="d-none text-danger w-100 input-message my-1">Vui lòng điền trường này</p>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-primary mb-3">Confirm</button>
+            {{/with}}
+        </form>
+
+    </div>
+</section>
+<script>
+    document.title = `Chỉnh sửa - {{news.titleNews}}`
+    var socket = io()
+    function addLink() {
+        var url = prompt('Nhập link cần chèn:', 'http://www.');
+        var selection = document.getSelection();
+        document.execCommand('createLink', true, url);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const changeColor = document.querySelector('#changeColor');
+        const fieldInputDesc = document.querySelector('#field-input-desc');
+        const desc = document.querySelector('#desc');
+        const newImgInput = document.querySelector('#img') 
+        const oldImg = document.querySelector('#oldImg') 
+        const editForm = document.forms['edit-form']
+        const submitBtn = document.querySelector('#submit-btn')
+
+
+        const page = {
+
+            changeColor() {
+                changeColor.oninput = function () {
+                    document.execCommand('foreColor', false, this.value)
+                }
+            },
+
+            insertImage() {
+                var input = document.querySelector('#insertImage')
+                input.onchange = function () {
+                    var file = input.files[0]
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        e.target.result
+                        socket.emit('send-img', {
+                            imgBase64: e.target.result,
+                            name: file.name,
+                        })
+                    }
+                    reader.readAsDataURL(file)
+                }
+            },
+
+            //get image from server response
+            getImg() {
+                socket.on('get-img', path => {
+                    var img = document.createElement('img')
+                    var p = document.createElement('p')
+                    p.style.textAlign = 'center'
+                    img.style.maxWidth = '75%'
+                    img.src = path
+                    p.append(img)
+                    fieldInputDesc.append(p)
+                })
+            },
+
+            replaceImg() {
+                var content
+                newImgInput.onchange = () => {
+                    var label = document.querySelector('[for="img"]')
+                    var agreeBtn = document.querySelector('.agree-btn')
+                    var img = document.createElement('img')
+                    var file = newImgInput.files[0]
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        img.src = e.target.result
+                        img.style.maxWidth = '100%'
+                    }
+                    try {
+                        reader.readAsDataURL(file)
+                        label.innerHTML = ''
+                        label.appendChild(img)
+                        agreeBtn.classList.remove('d-none')
+                    }
+                    catch (errors) {
+                        label.innerHTML = `<i class="bi bi-arrow-repeat fs-1"></i>`
+                        agreeBtn.classList.remove('d-none')
+                    }
+
+                    agreeBtn.onclick = function () {
+                        var oldImgChange = document.querySelector('[for="oldImg"] img')
+                        var html = `<input type="text" hidden name="imgDelete[]" value="${oldImg.value}">`
+                        editForm.insertAdjacentHTML('afterbegin', html)
+                        oldImgChange.src = img.src
+                        label.innerHTML = `<i class="bi bi-arrow-repeat fs-1"></i>`
+                        agreeBtn.classList.remove('d-none')
+                    }
+                }
+            },
+
+            //Validate form
+            inputValid(intputElements) {
+                var isValue = false
+                for (let item of intputElements) {
+                    if (item.value)
+                        isValue = true
+                    else {
+                        isValue = false
+                        break;
+                    }
+                }
+
+                if (!isValue) {
+                    for (let item of intputElements) {
+                        var inputGroup = getParent(item, '.input-group')
+                        if (!item.value) {
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        }
+                        else {
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+                        }
+                    }
+                }
+                return isValue
+            },
+
+            submitForm() {
+                var _this = this
+                editForm.onsubmit = function (e) {
+                    var field = editForm.querySelectorAll('.input-requierd, textarea')
+
+                    var isInputFull = _this.inputValid(field)
+                    if (!isInputFull) {
+                        const y = document.querySelector('.input-message:not(.d-none)').getBoundingClientRect().top + window.scrollY
+                        window.scroll({
+                            top: y - 150,
+                            behavior: 'smooth'
+                        })
+                        e.preventDefault()
+                        _this.handleValidInput()
+                    } else {
+                        this.submit()
+                    }
+                }
+            },
+
+            //Handle when click submit 
+            handleValidInput() {
+                var messages = editForm.querySelectorAll('.input-message')
+                var inputEquipment = editForm.querySelectorAll('.input-equipment')
+                var inputArr = []
+                var tmpArray = []
+
+                //Get input message error
+                messages.forEach(message => {
+                    if (!message.classList.contains('d-none'))
+                        inputArr.push([...message.closest('.input-group').querySelectorAll('input, #field-input-desc')])
+                })
+
+                //Flatten Array
+                inputArr.forEach(element => element.forEach(element => tmpArray.push(element)))
+
+                //Handle onput and hidden message
+                tmpArray.forEach(element => {
+                    element.oninput = function () {
+                        element.closest('.input-group')
+                            .querySelector('.input-message')
+                            .classList.add('d-none')
+                    }
+                })
+
+                inputEquipment.forEach(function (el) {
+                    el.onchange = function () {
+                        var inputGroup = getParent(el, '.input-group')
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+            //Handle when blur or typing input
+            handleBlurInput() {
+                var inputRequierd = editForm.querySelectorAll('input[type="text"], input[type="number"]')
+
+                fieldInputDesc.onblur = function () {
+                    var inputGroup = getParent(fieldInputDesc, '.input-group')
+                    if (!fieldInputDesc.innerHTML)
+                        inputGroup.querySelector('.input-message').classList.remove('d-none')
+                    else
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                }
+
+                inputRequierd.forEach(function (el) {
+                    var inputGroup = getParent(el, '.input-group')
+                    el.onblur = function () {
+                        if (!el.value)
+                            inputGroup.querySelector('.input-message').classList.remove('d-none')
+                        else
+                            inputGroup.querySelector('.input-message').classList.add('d-none')
+
+                    }
+                    el.oninput = function () {
+                        inputGroup.querySelector('.input-message').classList.add('d-none')
+                    }
+                })
+            },
+
+    
+            //Handle when input desc
+            getContent() {
+                desc.innerHTML = fieldInputDesc.innerHTML
+            },
+
+            inputDescChange() {
+                fieldInputDesc.addEventListener('keyup', this.getContent)
+                fieldInputDesc.addEventListener('focus', function () {
+                    document.execCommand("defaultParagraphSeparator", false, "p")
+                })
+                fieldInputDesc.addEventListener('paste', this.getContent)
+            },
+
+            start() {
+                document.execCommand("defaultParagraphSeparator", false, 'p');
+                this.changeColor()
+                this.insertImage()
+                this.getImg()
+                this.submitForm()
+                this.handleBlurInput()
+                this.getContent()
+                this.inputDescChange()
+            }
+
+        }
+
+        page.start()
+        
+        
+    })
+
+</script>

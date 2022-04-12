@@ -1,0 +1,32 @@
+const express = require('express')
+const router = express.Router()
+const AppsDashboardController = require('../app/controllers/AppsDashboardController')
+const NewsDashboardController = require('../app/controllers/NewsDashboardController')
+const upload = require('../app/middleware/UploadMiddleware')
+const { ROLE, authMiddleware } = require('../app/middleware/IsAuthenticatedMiddleware')
+const errorMiddleware = require('../app/middleware/ErrorMiddleware')
+function uploadOption(nameFolder, options) {
+    return upload(nameFolder).fields(options)
+}
+
+router.get('/app/create', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), AppsDashboardController.createPage)
+router.post('/app/create', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), uploadOption('app', [{ name: 'img', maxCount: 1 }, { name: 'descImage', maxCount: 30 }]), AppsDashboardController.create)
+router.post('/app/handle-action-form', authMiddleware.isDashboard(), authMiddleware.authRole([ROLE.ADMIN, ROLE.MONDERATOR]), AppsDashboardController.handleActionForm)
+router.get('/app/recycle', authMiddleware.isDashboard(), authMiddleware.authRole([ROLE.ADMIN, ROLE.MONDERATOR]), AppsDashboardController.recylePage)
+router.post('/app/recycle', authMiddleware.isDashboard(), authMiddleware.authRole([ROLE.ADMIN]), AppsDashboardController.recycle)
+router.delete('/app/recycle/:id/delete', authMiddleware.isDashboard(), authMiddleware.authRole([ROLE.ADMIN]), AppsDashboardController.deleteForever)
+router.get('/app/:id/edit', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), AppsDashboardController.editPage)
+router.put('/app/:id/update', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), uploadOption('app', [{ name: 'img', maxCount: 1 }, { name: 'descImage', maxCount: 30 }]), AppsDashboardController.update)
+router.get('/app/:id/restore', authMiddleware.isDashboard(), authMiddleware.authRole([ROLE.ADMIN]), AppsDashboardController.restore)
+router.get('/news/create', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.createNews)
+router.get('/news/recycle', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.recyclePage)
+router.post('/news/recycle', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.recycleListItem)
+router.post('/news/create', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), uploadOption('news', [{ name: 'img', maxCount: 1 }]), NewsDashboardController.postNews)
+router.get('/news/edit/:id', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.edit)
+router.post('/news/edit/:id', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), uploadOption('news', [{ name: 'img', maxCount: 1 }]), NewsDashboardController.editPost)
+router.get('/news', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.managerNews)
+router.post('/news', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), NewsDashboardController.deleteNews)
+router.get('/', authMiddleware.isDashboard(), authMiddleware.authRole(ROLE), AppsDashboardController.manager)
+router.all('*', errorMiddleware)
+
+module.exports = router

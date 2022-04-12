@@ -1,0 +1,219 @@
+<section class="slide-show">
+    <div class="container g-3 position-relative">
+            
+        <div class="swiper gallery-top user-select-none">
+            <div class="swiper-wrapper">
+            {{{renderSwiper app.descImage app.name}}}
+            </div>
+            <!-- Add Arrows -->
+        </div>
+
+        <div class="swiper gallery-thumbs user-select-none">
+            <div class="swiper-wrapper">
+            {{{renderSwiper app.descImage app.name}}}
+            </div>
+            <div class="swiper-prev rounded-circle"><i class="bi bi-chevron-left"></i></div>
+            <div class="swiper-next rounded-circle"><i class="bi bi-chevron-right"></i></div>
+        </div>
+    </div>
+</section>
+
+<section class="app-detail">
+  <div class="container g-3">
+
+    <div class="detail-wrap">
+      <div class="detail-left">
+        {{{renderAppImg app}}}
+      </div>
+
+      <div class="detail-right">
+        <div class="detail-name">
+          <div class="app-text">
+            <div class="text-name no-hover fs-3">{{app.name}}</div>
+            <div class="app-text-type">{{app.type}}</div>
+          </div>
+          <div class="app-button d-none d-md-flex">
+            <button class="share-btn"><i class="bi bi-share-fill"></i></button>
+            <div class="button-group">
+              <a href="#" type="button" class="btn btn-large btn-bg">Tải về</a>
+              <p class="app-price">{{showPrice app.price}}</p>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <ul class="detail-spec">
+          <li class="detail-item">Cập nhật: <span>{{formatTime app.updatedAt 'dd/mm/yyyy'}}</span></li>
+          <li class="detail-item">Tải về: <span>{{app.download}}</span></li>
+          <li class="detail-item">Kích cỡ: <span>{{app.size}}MB</span></li>
+          <li class="detail-item">Thiết bị: <span>{{app.equipment}}</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="app-desc">
+  <div class="container g-3">
+
+    <div class="desc-title">
+      <p class="text-name no-hover m-0">Mô tả</p>
+      <div class="swiper-img-control">
+        <span class="swiper-prev"><i class="bi bi-chevron-double-left"></i></span>
+        <span class="swiper-next"><i class="bi bi-chevron-double-right"></i></span>
+      </div>
+    </div>
+    
+    <div class="desc-swiper">
+      <div class="swiper desc-swiper-container">
+        <div class="swiper-wrapper">
+
+          {{{renderSwiper app.descImage app.name}}}
+
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-text">
+      <div class="text">
+        {{{app.desc}}}
+      </div>
+    </div>
+
+    <hr />
+  </div>
+</section>
+
+<section class="comment">
+  <div class="container g-3">
+
+    {{!-- Form comment user --}}
+    <div action="" id="user-cmt">
+      <div class="avatar-input">
+        <img loading="lazy" src="{{user.avatar}}" id="cmt-avatar" alt="" />
+        <textarea name="" id="textComment" rows="1" placeholder="Nhập bình luận..."></textarea>
+        <button id="sendComment" class="mb-0 btn">Gửi bình luận</button>
+      </div>
+      <p class="form-message text-center d-none">Bạn chưa nhập bình luận</p>
+    </div>
+
+    <div class="comment-list" id="cmt-context"></div>
+
+  </div>
+</section>
+
+<div id="modal-validate-btn" data-bs-toggle="modal" data-bs-target="#modal-validate-login"></div>
+<div class="modal fade" id="modal-validate-login">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thông báo!!!</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn chưa đăng nhập. Đăng nhập để thực hiện chức năng này!!!</p>
+      </div>
+      <div class="modal-footer">
+        <div class="btn btn-danger btn-sm" data-bs-dismiss="modal">Đóng</div>
+        <a href="/user/register" class="btn btn-primary btn-sm">Đăng ký</a>
+        <a href="/user/login" class="btn btn-primary btn-sm">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    var swiper = new Swiper('.desc-swiper .desc-swiper-container', {
+    slidesPerView: 2,
+    spaceBetween: 30,
+    navigation: {
+      nextEl: '.desc-title .swiper-next',
+      prevEl: '.desc-title .swiper-prev',
+    },
+    speed: 800,
+    breakpoints: {
+      768: {
+        slidesPerView: 3,
+      },
+      992: {
+        slidesPerView: 4,
+      }
+    }
+  })
+
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+      slidesPerView: 2,
+      loop: true,
+      navigation: {
+        nextEl: '.slide-show .swiper-next',
+        prevEl: '.slide-show .swiper-prev',
+      },
+      speed: 800,
+      breakpoints: {
+      768: {
+        slidesPerView: 3,
+      },
+      992: {
+        slidesPerView: 4,
+      }
+    }
+    });
+    
+    var galleryTop = new Swiper('.gallery-top', {
+      spaceBetween: 10,
+      loop: true,
+      loopedSlides: 5, //looped slides should be the same
+      speed: 800,
+      navigation: {
+        nextEl: '.slide-show .swiper-next',
+        prevEl: '.slide-show .swiper-prev',
+      },
+      thumbs: {
+        swiper: galleryThumbs,
+      },
+    });
+</script>
+
+<script src="/js/comment.js"></script>
+<script>
+
+  var socket = io()
+  const comments = {{{ returnValue comment }}}
+  const userComment = {{{ returnValue userComment }}}
+  const app = {{{ returnValue app }}}
+  const user = {{{ returnValue user }}}
+  const userFull = {{{ returnValue userFull }}}
+  const sendCommentBtn = document.querySelector('#sendComment')
+  const cmtAvatar = document.querySelector('#cmt-avatar')
+  const modalValidateBtn = document.querySelector('#modal-validate-btn')
+  const modalValidateLogin = document.querySelector('#modal-validate-login')
+  const textComment = document.querySelector('#textComment')
+  const cmtContext = document.querySelector('#cmt-context')
+  document.addEventListener('DOMContentLoaded', function () {
+    
+    var likeBtn = cmtContext.querySelectorAll('.like')
+    var replyBtn = cmtContext.querySelectorAll('.reply')
+
+    handleComment('app')
+  
+    const page = {
+
+      handleNotLoginAvatar() {
+        //if not login set default avatar
+        if (Object.keys(user).length == 0) {
+          cmtAvatar.src = '/img/user-icon.svg'
+        }
+      },
+
+      start() {
+        this.handleNotLoginAvatar()
+      }
+
+    }
+    
+
+    page.start()
+  })
+
+</script>

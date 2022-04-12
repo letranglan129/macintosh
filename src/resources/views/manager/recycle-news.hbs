@@ -1,0 +1,408 @@
+<section class="">
+    <div class="container g-3">
+        <div id="manager-app" class="mb-0">
+
+            <div class="title">
+                <i class="bi bi-columns-gap"></i>
+                Quản lí tin tức
+            </div>
+            <hr class="my-3" />
+            <div class="create mb-1 d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <a href="/dashboard/news" class="btn btn-sm btn-primary mb-2 rounded-3" title="Tạo mới">Quản lý tin tức</a>
+                </div>
+                <div class="search mb-2 ms-auto">
+                    <form class="row g-0" name="search-form-dashboard">
+                        <div class="col-auto">
+                            <label for="searchInput" class="visually-hidden">Tìm kiếm...</label>
+                            <input type="text" name="keyword" style="height:30px"
+                                class="form-control form-control-sm" id="searchInput" placeholder="Tìm kiếm..." />
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" id="submit-search" style="height:30px" class="btn btn-sm btn-primary m-0"><i
+                                    class="bi bi-search m-0"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <form method="POST">
+                <div class="d-flex align-items-center justify-content-between flex-wrap my-3">
+                    <div class="d-flex align-items-center">
+                        <select name="action" id="select-action" class="form-select form-select-sm me-3"
+                            style="width: 240px;" required>
+                            <option value="">-- Hành động --</option>
+                            <option value="restore">Khôi phục</option>
+                            <option value="delete">Xóa vĩnh viến</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary m-0 disabled" id="submit-action-btn">Thực
+                            hiện</button>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="checkAll" class="form-check-input checkbox-item">
+                    <label for="checkAll">Chọn tất cả</label>
+                </div>
+                
+                <div id="news-list">
+                    <div class="row">
+                        {{#each news}}
+                        <div class="col col-lg-4 col-sm-6 col-12 g-3 g-lg-4" id="{{this._id}}">
+                            <div class="card card-pic h-100 shadow-sm">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card-img">
+                                            <a class="card-img-link rounded-bottom-0">
+                                                <img loading="lazy" src="{{this.img}}"
+                                                    class="card-img-top rounded-0 nohover">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card-body">
+                                            <a href="/dashboard/news/edit/{{this._id}}" class="card-title text-name">
+                                                {{this.titleNews}}
+                                            </a>
+                                            <div class="info justify-content-start mb-3">
+                                                <div class="author">
+                                                    <div class="avatar">
+                                                        <img loading="lazy" src="{{this.user.avatar}}"
+                                                            width="40px" class="rounded-circle">
+                                                    </div>
+                                                    <div class="">
+                                                        <div class="name">{{this.user.name}}</div>
+                                                        <div class="debut">{{{formatTime this.createdAt}}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-text text-truncate-lines" style="--line: 3">
+                                                {{{formatDescNews this.desc}}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="option">
+                                    <input type="checkbox" name="close-option" id='{{this._id}}-checkbox' hidden>
+                                    <label for="{{this._id}}-checkbox" class="d-block" role="button">
+                                        <i class="bi bi-gear"></i>
+                                    </label>
+                                    <div class="menu-option">
+                                        <a href="/dashboard/news/edit/{{this._id}}" role="button"><i class="bi bi-pencil-square"></i></a>
+                                        <a data-id="{{this._id}}" class="delete-item-btn" role="button"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </div>
+                                <div class="card-checkbox">
+                                    <input type="checkbox" class="form-check-input checkbox-item" name="checkedList[]" value="{{this._id}}">
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="text-center my-3 load-more-wrap">
+                <button class="btn px-5 py-2" id="load-more">Xem thêm</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Warning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa???</p>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        id="close-modal-delete">Hủy</a>
+                    <a type="button" class="btn btn-danger" id="btn-delete">Xác nhận</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form name="delete-form" method="POST"></form>
+</section>
+
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toast-message">
+    <div class="toast-header">
+        <img loading="lazy" src="/img/success.jpg" class="toast-img rounded me-2" width="25px">
+        <strong class="me-auto toast-title">Thành công</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" data-bs-target="#toast-message"></button>
+    </div>
+    <div class="toast-body">
+        Bạn đã xóa thành công!!!
+    </div>
+</div>
+
+<script>
+    var socket = io()
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var modalDelete = document.querySelector('#modal-delete')
+        var newsList = document.querySelector('#news-list')
+        var checkboxAll = document.querySelector('#checkAll')
+        var checkboxItem = [...document.querySelectorAll('.checkbox-item:not(#checkAll)')]
+        var deleteForm = document.forms['delete-form'];
+        var selectAction = document.querySelector('#select-action')
+        var submitActionBtn = document.querySelector('#submit-action-btn')
+        var loadMoreBtn = document.querySelector('#load-more')
+        var deleteItemBtn = document.querySelectorAll('.delete-item-btn')
+        var searchFormDashboard = document.forms['search-form-dashboard']
+        var myModal = new bootstrap.Modal(modalDelete)
+        var countDeleted = {{{ returnValue countDeleted }}}
+        var isChecked = false
+        var isFilterFull = false
+        var id
+        var dataTableHtml
+        var amountNewsOnPage = newsList.querySelectorAll('.card.card-pic').length
+        var searchQueryUrl
+
+        var page = {
+            deleteItemBtnClick(deleteItemBtn) {
+                deleteItemBtn.forEach(element => {
+                    element.addEventListener('click', function () {
+                        id = element.dataset.id
+                        myModal.show()
+                    })
+                })
+            },
+
+            formatTime (string) {
+                var date = new Date(string)
+                return date.toLocaleDateString()
+            },
+
+            formatDescNews(string) {
+                return string.split(/<[^>]+>/g).join('')
+            },
+
+            loadMoreHandle() {
+                searchQueryUrl = decodeURI(window.location.search)
+                    .replace('?', '')
+                    .split('&')
+                    .map(param => param.split('='))
+                    .reduce((values, [ key, value ]) => {
+                        values[ key ] = value
+                        return values
+                    }, {})
+
+                loadMoreBtn.addEventListener('click', function () {
+                    loadMoreBtn.innerHTML = `<div class="spinner-border text-dark" role="status"></div>`
+                    socket.emit('load-next-news', amountNewsOnPage, searchQueryUrl, true)
+                })
+            },
+    
+            //Toast message
+            effectToast(toastElement, infoToast, status) {
+                toastElement.querySelector('.toast-img').src = infoToast.img || '/img/warning.jpg'
+                toastElement.querySelector('.toast-title').innerText = infoToast.title || 'Cảnh báo'
+                toastElement.querySelector('.toast-img').innerText = infoToast.message || ''
+                var toast = new bootstrap.Toast(toastElement)
+
+                if (status)
+                    toast.show()
+                else
+                    toast.hide()
+            },
+
+            checkedAll(checkboxAllElement, checkboxItemElement, selectorcheckboxAll, selectorcheckboxItem) {
+                //Handle when change checkboxAll
+                var _this = this
+                checkboxAllElement.onchange = () => {
+                    var isCheckAll = document.querySelector(`${selectorcheckboxAll}:checked`) || false
+                    if (isCheckAll)
+                        checkboxItemElement.forEach(item => item.checked = true)
+
+                    else
+                        checkboxItemElement.forEach(item => item.checked = false)
+
+                    _this.onSubmitBtn()
+                }
+                //Handle when change checkbox item
+                checkboxItemElement.forEach(item => {
+                    item.onclick = () => {
+                        var checkboxItemCheck = document.querySelectorAll(`${selectorcheckboxItem}:checked`)
+                        _this.onSubmitBtn()
+                        if (checkboxItemCheck.length === checkboxItemElement.length)
+                            checkboxAllElement.checked = true
+                        else
+                            checkboxAllElement.checked = false
+                    }
+                })
+            },
+
+            modalHandle() {
+                var _this = this
+                modalDelete.addEventListener('show.bs.modal', function () {
+                    var toastMessage = document.getElementById('toast-message')
+                    var btnDelete = document.getElementById('btn-delete')
+                    var closeModalDelete = document.getElementById('close-modal-delete')
+
+                    btnDelete.onclick = function () {
+                        socket.emit('soft-delete-news', id )
+                        socket.on('result-soft-delete-news', data => {
+
+                            if(data.result) {
+                                document.getElementById(data.id).remove()
+                                _this.effectToast(
+                                    toastMessage,
+                                    {
+                                        img: '/img/success.jpg',
+                                        title: 'Thành công',
+                                        message: 'Bạn đã xóa thành công!!!',
+                                    },
+                                    true,
+                                )
+                            }
+                            else {
+                                _this.effectToast(
+                                    toastMessage,
+                                    {
+                                        img: '/img/failed.jpg',
+                                        title: 'Thất bại',
+                                        message: 'Xóa không thành công!!!',
+                                    },
+                                    true,
+                                )
+                            }
+                        })
+                        closeModalDelete.click()
+                    }
+
+                })  
+            },
+
+            onSubmitBtn() {
+                var checkboxItemCheck = document.querySelectorAll('.checkbox-item:not(#checkAll):checked');
+                if (selectAction.value && checkboxItemCheck.length > 0)
+                    submitActionBtn.classList.remove('disabled')
+                else
+                    submitActionBtn.classList.add('disabled')
+            },
+
+            renderResult() {
+                var _this = this
+                socket.on('result-next-news', news => {
+                    amountNewsOnPage += 9
+                    var htmls = news.map(element => `<div class="col col-lg-4 col-sm-6 col-12 g-3 g-lg-4" id="${element._id}">
+                                                        <div class="card card-pic h-100 shadow-sm">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="card-img">
+                                                                        <a class="card-img-link rounded-bottom-0">
+                                                                            <img loading="lazy" src="${element.img}"
+                                                                                class="card-img-top rounded-0 nohover">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="card-body">
+                                                                        <a href="/dashboard/news/edit/${element._id}" class="card-title text-name">
+                                                                            ${element.titleNews}
+                                                                        </a>
+                                                                        <div class="info justify-content-start mb-3">
+                                                                            <div class="author">
+                                                                                <div class="avatar">
+                                                                                    <img loading="lazy" src="${element.user.avatar}"
+                                                                                        width="40px" class="rounded-circle">
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <div class="name">${element.user.name}</div>
+                                                                                    <div class="debut">${_this.formatTime(element.createdAt)}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="card-text text-truncate-lines" style="--line: 3">
+                                                                            ${_this.formatDescNews(element.desc)}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="option">
+                                                                <input type="checkbox" name="close-option" id='${element._id}-checkbox' hidden>
+                                                                <label for="${element._id}-checkbox" class="d-block" role="button">
+                                                                    <i class="bi bi-gear"></i>
+                                                                </label>
+                                                                <div class="menu-option">
+                                                                    <a href="/dashboard/news/edit/${element._id}" role="button"><i class="bi bi-pencil-square"></i></a>
+                                                                    <a data-id="${element._id}" class="delete-item-btn" role="button"><i class="bi bi-trash"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-checkbox">
+                                                                <input type="checkbox" class="form-check-input checkbox-item" name="checkedList[]" value="${element._id}">
+                                                            </div>
+                                                        </div>
+                                                    </div>`)
+                    htmls = htmls.join('')
+
+                    // add to DOM
+                    newsList.querySelector('.row').insertAdjacentHTML('beforeend', htmls)
+                    loadMoreBtn.innerHTML = `Xem thêm`
+
+                    //get again  new loaded Element
+                    checkboxItem = [...document.querySelectorAll('.checkbox-item:not(#checkAll)')]
+                    _this.checkedAll(checkboxAll, checkboxItem, '#checkAll', '.checkbox-item:not(#checkAll)')
+                    deleteItemBtn = document.querySelectorAll('.delete-item-btn')
+                    _this.deleteItemBtnClick(deleteItemBtn)
+                    _this.toggleLoadMoreBtn()
+                })
+            },
+
+            toggleLoadMoreBtn() {
+                if(typeof countDeleted === "object" || 
+                    amountNewsOnPage - countDeleted >= 0) {
+                    document.querySelector('.load-more-wrap').classList.add('d-none')
+                }
+            },
+
+            noItem() {
+                if(searchQueryUrl.hasOwnProperty('keyword') && typeof countDeleted === "object") {
+                    newsList.innerHTML = `<div class="text-center">
+                            <img loading="lazy" src="/img/no-result.png" style="max-width: 300px">
+                            <p class="my-3">Không có kết quả nào trùng khớp với từ khóa tìm kiếm!!!</p>
+                    </div>`
+                    return
+                }
+
+                if(typeof countDeleted === "object")
+                    newsList.innerHTML = `<div class="text-center">Thùng rác trống!!!</div>` 
+            },
+
+            handleInput(form) {
+                form.onsubmit = function (e) {
+                    var input = this.querySelector('input')
+                    if(input.value.trim() === '')
+                        e.preventDefault()
+                    else 
+                        input.value = input.value.trim()
+                }
+            },
+
+            start() {
+                this.toggleLoadMoreBtn()
+                this.loadMoreHandle()
+                this.noItem()
+                this.handleInput(searchFormDashboard)
+                this.checkedAll(checkboxAll, checkboxItem, '#checkAll', '.checkbox-item:not(#checkAll)')
+                this.deleteItemBtnClick(deleteItemBtn)
+                this.modalHandle()
+                this.renderResult()
+                selectAction.onchange = ()=> this.onSubmitBtn()
+            } 
+        }
+
+        page.start()
+    
+    })
+
+</script>

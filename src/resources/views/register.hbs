@@ -1,0 +1,93 @@
+<section id="register" class="user">
+    <div class="title">
+        <p class="h2 mb-3 fw-bold text-center">Đăng ký</p>
+        <p class="h6 mb-3 text-center">Với mạng xã hội của bạn</p>
+    </div>
+    <div class="d-flex align-items-center justify-content-around mb-4">
+        <a href="" class="btn btn-primary px-5">
+            <i class="bi bi-google"></i>
+            GOOGLE
+        </a>
+        <a href="" class="btn text-white px-5" style="background:#3a5998">
+            <i class="bi bi-facebook"></i>
+            FACEBOOK
+        </a>
+    </div>
+    <p class="line">
+        <span>hoặc</span>
+    </p>
+
+    {{{renderMessage errors 'danger'}}}
+
+    <form action="/user/register" method="POST" id="register-form">
+        <div class="mb-3 form-group">
+            <label for="username" class="form-label">Nickname</label>
+            <input type="text" class="form-control" name="username" id="username" value="{{returnErrorValue username}}">
+            <p class="form-message"></p>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email" value="{{returnErrorValue email}}">
+            <p class="form-message"></p>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input type="password" class="form-control" name="password" id="password" value="{{returnErrorValue password}}">
+            <p class="form-message"></p>
+        </div>
+
+        <div class="mb-3 form-group">
+            <label for="password2" class="form-label">Nhập lại mật khẩu</label>
+            <input type="password" class="form-control" name="password2" id="password2" value="{{returnErrorValue password2}}">
+            <p class="form-message"></p>
+        </div>
+
+        <div class="option-login d-flex align-items-center justify-content-between mb-3">
+            <div class="save-login  form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="yes" name="agreeRule" id="agree-rule">
+                    <label class="form-check-label" for="agree-rule">
+                        Tôi đồng ý với <a href="#"><u>Điều khoản của dịch vụ</u></a>
+                    </label>
+                </div>
+                    <p class="form-message"></p>
+            </div>
+        </div>
+
+        <button type="submit" class="py-2 w-100">Đăng nhập</button>
+    </form>
+
+    <div class="register">
+        Bạn đã có tài khoản?
+        <a href="/user/login">Đăng nhập ngay</a>
+    </div>
+</section>
+
+<script src="/js/validate.js"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        Validator({
+            formElement: '#register-form',
+            formMessage: '.form-message',
+            formGroup: '.form-group',
+            rules: [
+                Validator.isRequired('#username'),
+                Validator.isRequired('#email'),
+                Validator.isEmail('#email'),
+                Validator.isRequired('#password'),
+                Validator.isRequired('#password2'),
+                Validator.minLength('#password',6),
+                Validator.minLength('#password2',6),
+                Validator.isRequired('#agree-rule', 'Vui lòng đọc và chấp thuận các điều khoản để hoàn tất đăng kí'),
+                Validator.isConfirmed('#password2', function() {
+                    return document.querySelector('#password').value
+                })
+            ]
+        })
+    })
+</script>
