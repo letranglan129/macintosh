@@ -90,9 +90,9 @@
     {{!-- Form comment user --}}
     <div action="" id="user-cmt">
       <div class="avatar-input">
-        <img loading="lazy" src="{{user.avatar}}" id="cmt-avatar" alt="" />
-        <textarea name="" id="textComment" rows="1" placeholder="Nhập bình luận..."></textarea>
-        <button id="sendComment" class="mb-0 btn">Gửi bình luận</button>
+        <img loading="lazy" src="{{user.avatar}}" id="cmt-avatar" onerror="this.src='/img/user-icon.svg'" class="me-4"/>
+        <textarea name="" class="flex-grow-1 flex-shrink-0 flex-md-fill" id="textComment" rows="1" placeholder="Nhập bình luận..."></textarea>
+        <button id="sendComment" class="mb-0 ms-auto ms-sm-4 mt-2 mt-md-0 btn">Gửi bình luận</button>
       </div>
       <p class="form-message text-center d-none">Bạn chưa nhập bình luận</p>
     </div>
