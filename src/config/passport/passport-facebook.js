@@ -19,9 +19,9 @@ module.exports = function (passport) {
 
 
     passport.use(new FacebookStrategy({
-        clientID: '158285219725874',
-        clientSecret: '469ae7bf015d659aa6eb183f5d96a291',
-        callbackURL: 'http://localhost:3000/user/auth/facebook/callback',
+        clientID: '2904483719862070',
+        clientSecret: 'ec7c74f3d3dc8f1a96849067c3dce54a',
+        callbackURL: 'https://macintosh-demo.herokuapp.com/user/auth/facebook/callback',
         profileFields: ['id', 'displayName', 'name', 'email', 'gender', 'picture.type(large)'],
     }, (accessToken, refreshToken, profile, done) => {
             User.findOne({ 'facebook.id': profile.id }, (err, user) => {
