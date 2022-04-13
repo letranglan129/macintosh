@@ -19,7 +19,7 @@ module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: '305781231273-nu152thkh1753hmmj5pujfs06te0lo9m.apps.googleusercontent.com',
         clientSecret: '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',
-        callbackURL: 'https://macintosh-demo.herokuapp.com/user/auth/facebook/callback',
+        callbackURL: 'https://macintosh-demo.herokuapp.com/user/auth/google/callback',
     }, (accessToken, refreshToken, profile, done) => {
 
         User.findOne({'google.id': profile.id}, (err, user) => {
