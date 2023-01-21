@@ -9,6 +9,9 @@
         "start": "node ./src/index.js",
         "watch": "node-sass -w src/resources/sass -o src/public/css"
     },
+    "engines": {
+        "node": "18.x"
+    },
     "author": "lelan",
     "license": "ISC",
     "dependencies": {
@@ -31,6 +34,6 @@
         "socket.io": "^4.1.3"
     },
     "devDependencies": {
-        "node-sass": "^6.0.1"
+        "node-sass": "^8.0.0"
     }
 }
