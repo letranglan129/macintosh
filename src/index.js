@@ -23,7 +23,7 @@ const userFacebook = require('./config/passport/passport-facebook')
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
-
+require('dotenv').config()
 //PORT
 const port = process.env.PORT || 3001
 
