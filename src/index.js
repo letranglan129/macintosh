@@ -25,7 +25,7 @@ const io = require('socket.io')(server)
 
 require('dotenv').config()
 //PORT
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 
 //Connect to DB
 db.connect()

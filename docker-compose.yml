@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  macintosh:
+    restart: always
+    build: 
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 8006:3000
+    command: "npm run start"
+    environment:
+      - PORT=3000
+    env_file:
+      - .env
